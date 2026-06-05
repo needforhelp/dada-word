@@ -132,14 +132,15 @@
             .main-content { margin-left: 0 !important; }
         }
 
-        /* 标题发光特效 (轴上点靠近时) */
+        /* 强化后的标题发光特效 (轴上点靠近时) */
         .section-title.glow-title h2 {
-            text-shadow: 0 0 8px rgba(100, 200, 180, 0.6), 0 0 12px rgba(100, 168, 206, 0.4);
+            text-shadow: 0 0 12px #64c59e, 0 0 20px #64a8ce, 0 0 6px rgba(100, 200, 180, 0.8);
             transition: text-shadow 0.2s ease;
         }
         .section-title.glow-title .fold-icon {
-            color: #7fe0c0;
-            text-shadow: 0 0 4px #64c59e;
+            color: #b3ffea;
+            text-shadow: 0 0 8px #64c59e, 0 0 12px #64a8ce;
+            transform: scale(1.05);
         }
 
         /* 歌词区域样式 */
@@ -315,7 +316,7 @@
             .lyric-card { max-width: 100%; }
         }
 
-        /* 后记框样式 - 无段首空格，严格左对齐 */
+        /* 后记框样式 - 带遮罩 */
         .side-notes h3 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.5rem;
@@ -327,6 +328,50 @@
             margin-bottom: 1rem;
             border-bottom: 1px solid rgba(100, 168, 206, 0.5);
             display: inline-block;
+        }
+        .notes-container {
+            position: relative;
+        }
+        .postscript-content-wrapper {
+            transition: filter 0.3s ease;
+        }
+        /* 遮罩层样式 */
+        .notes-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 30, 35, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            z-index: 5;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(100, 168, 206, 0.4);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .notes-mask i {
+            font-size: 2rem;
+            color: #64c59e;
+            filter: drop-shadow(0 0 6px #64a8ce);
+        }
+        .notes-mask span {
+            font-size: 0.9rem;
+            color: #e0f0f5;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            letter-spacing: 1px;
+        }
+        .notes-mask:hover {
+            background: rgba(10, 30, 35, 0.75);
+            backdrop-filter: blur(10px);
         }
         .postscript-block {
             margin-bottom: 1.5rem;
@@ -348,7 +393,7 @@
             white-space: pre-wrap;
             word-break: break-word;
             border-left: 2px solid #64c59e;
-            text-indent: 0;        /* 确保无首行缩进 */
+            text-indent: 0;
         }
         .hero { text-align: center; margin-bottom: 2rem; position: relative; z-index: 2; }
         .hero-tagline { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: #b9e2f0; border-top: 1px solid rgba(100, 168, 206, 0.4); border-bottom: 1px solid rgba(100, 168, 206, 0.4); display: inline-block; padding: 0.5rem 1.2rem; background: rgba(10, 30, 35, 0.5); backdrop-filter: blur(4px); border-radius: 60px; font-style: italic; }
@@ -375,12 +420,18 @@
         <div id="app-root"></div>
     </div>
 
-    <!-- 静态后记框（拆分“其一”“其二”，无段首空格） -->
+    <!-- 后记带遮罩 -->
     <aside class="side-notes" id="notes-panel">
         <h3><i class="fas fa-book-open"></i> 后记</h3>
-        <div class="postscript-block">
-            <div class="postscript-subtitle">其一</div>
-            <div class="postscript-content">
+        <div class="notes-container" id="notes-container">
+            <div class="notes-mask" id="notes-mask">
+                <i class="fas fa-lock-open"></i>
+                <span>点击查看后记</span>
+            </div>
+            <div class="postscript-content-wrapper" id="postscript-wrapper" style="filter: blur(4px); opacity: 0.6;">
+                <div class="postscript-block">
+                    <div class="postscript-subtitle">其一</div>
+                    <div class="postscript-content">
 总的来说，依旧是一时兴起的产物，跟日推本身差不多。
 
 因为想到真的发了很多莫名其妙的日推，也知道肯定没人听（毕竟自己也不听别人的朋友圈推歌），于是便想着废物利用，而文字是再好不过的方式。
@@ -396,11 +447,11 @@
 认真的碎碎念很吓人不是么？
 
 总之，祝看到这个网站的人毕业快乐，反正只要足够狡辩，不是毕业季也可以陷入毕业的感知。
-            </div>
-        </div>
-        <div class="postscript-block">
-            <div class="postscript-subtitle">其二</div>
-            <div class="postscript-content">
+                    </div>
+                </div>
+                <div class="postscript-block">
+                    <div class="postscript-subtitle">其二</div>
+                    <div class="postscript-content">
 依旧一时兴起碎碎念。尽管代码没一个字是自己写的，我只是一个拿到名为ai的枪的猴子，制作过程中还是一度想放弃。
 
 很显然，这个东西非常之无聊，而本人也想不到什么让这东西更有趣一点的方法。
@@ -412,6 +463,8 @@
 虽然放弃掉更符合本人的精神状态——说穿了也就到季节的部分，正常状态下更是只到梦境。会有“前行”这一环不过是气氛到了。
 
 ？唉，碎碎念得还是太吓人了，还是把网站设置成仅限一天的好了。
+                    </div>
+                </div>
             </div>
         </div>
     </aside>
@@ -560,7 +613,7 @@
         timelineAxis.style.height = `${endBottom - startTop}px`;
     }
     
-    // 高亮离圆点最近的标题
+    // 高亮离圆点最近的标题（强化特效）
     function highlightNearestTitle() {
         if (!timelineAxis || !axisDot) return;
         const titles = Array.from(document.querySelectorAll('.section-title'));
@@ -758,6 +811,18 @@
         refreshTimeline();
     }
 
+    // 后记遮罩逻辑
+    function setupNotesMask() {
+        const mask = document.getElementById('notes-mask');
+        const wrapper = document.getElementById('postscript-wrapper');
+        if (!mask || !wrapper) return;
+        mask.addEventListener('click', () => {
+            mask.style.display = 'none';
+            wrapper.style.filter = 'none';
+            wrapper.style.opacity = '1';
+        });
+    }
+
     // ----- 初始化所有 -----
     function init() {
         renderSections();
@@ -771,6 +836,7 @@
             window.addEventListener('scroll', onScrollOrResize);
             window.addEventListener('resize', () => { recalcAxisGeometry(); onScrollOrResize(); });
         }
+        setupNotesMask();
     }
     init();
 </script>
