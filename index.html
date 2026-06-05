@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>碎镜重组 · 歌词序列诗 | 后记 · 蓝绿变奏</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a1a1c 0%, #02080a 100%);
+            font-family: 'Inter', sans-serif;
+            color: #eef2ff;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a2a2e; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: #64a8ce; border-radius: 8px; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 5rem;
+            position: relative;
+        }
+
+        /* 桌面端布局：主内容左移避开时间轴，后记区宽度增加 */
+        @media (min-width: 900px) {
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2rem;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+            .main-content {
+                flex: 2;
+                min-width: 0;
+                width: 0;
+                margin-left: 2.8rem;
+            }
+            .side-notes {
+                flex: 0.9;
+                min-width: 260px;
+                max-width: 340px;
+                margin-top: 6rem;
+                background: rgba(25, 45, 50, 0.4);
+                backdrop-filter: blur(12px);
+                border-radius: 28px;
+                padding: 1.5rem 1.2rem;
+                border: 1px solid rgba(100, 168, 206, 0.3);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+                transition: all 0.2s;
+                position: static;
+            }
+        }
+
+        /* 移动端：后记区放在主内容之后 */
+        @media (max-width: 899px) {
+            .container {
+                display: flex;
+                flex-direction: column;
+            }
+            .side-notes {
+                order: 10;
+                margin-top: 2rem;
+                background: rgba(25, 45, 50, 0.4);
+                backdrop-filter: blur(12px);
+                border-radius: 28px;
+                padding: 1.5rem 1.2rem;
+                border: 1px solid rgba(100, 168, 206, 0.3);
+            }
+        }
+
+        /* 时间轴 - 蓝绿渐变 */
+        .timeline-axis {
+            position: absolute;
+            left: 2rem;
+            top: 180px;
+            width: 4px;
+            background: linear-gradient(180deg, 
+                rgba(100, 168, 206, 0.2) 0%,
+                rgba(100, 197, 158, 0.8) 30%,
+                rgba(100, 197, 158, 0.8) 70%,
+                rgba(100, 168, 206, 0.2) 100%);
+            z-index: 10;
+            pointer-events: none;
+            border-radius: 4px;
+            box-shadow: 0 0 8px rgba(100, 168, 206, 0.4), inset 0 0 2px rgba(100, 197, 158, 0.6);
+            transition: height 0.2s ease, top 0.2s ease;
+        }
+        .axis-dot {
+            position: absolute;
+            left: -5px;
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle, #a0e0c0, #64c59e);
+            border: 2px solid #e6fffa;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(100, 197, 158, 0.5), 0 0 15px 2px #64a8ce;
+            transition: top 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            z-index: 15;
+            pointer-events: none;
+            opacity: 1;
+        }
+        .axis-hint {
+            position: absolute;
+            left: 16px;
+            top: -28px;
+            white-space: nowrap;
+            font-size: 0.7rem;
+            font-weight: 400;
+            font-family: 'Inter', sans-serif;
+            color: #cae9ff;
+            background: rgba(10, 30, 35, 0.7);
+            backdrop-filter: blur(6px);
+            padding: 4px 10px;
+            border-radius: 40px;
+            border: 1px solid rgba(100, 168, 206, 0.5);
+            letter-spacing: 0.3px;
+            pointer-events: none;
+            z-index: 12;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .axis-hint i { font-size: 0.65rem; margin-right: 6px; color: #64c59e; }
+        @media (max-width: 780px) {
+            .timeline-axis { left: 1.2rem; width: 3px; }
+            .axis-dot { left: -5px; width: 11px; height: 11px; }
+            .axis-hint { left: 12px; top: -24px; font-size: 0.6rem; padding: 3px 8px; }
+            .main-content { margin-left: 0 !important; }
+        }
+
+        /* 标题发光特效 (轴上点靠近时) */
+        .section-title.glow-title h2 {
+            text-shadow: 0 0 8px rgba(100, 200, 180, 0.6), 0 0 12px rgba(100, 168, 206, 0.4);
+            transition: text-shadow 0.2s ease;
+        }
+        .section-title.glow-title .fold-icon {
+            color: #7fe0c0;
+            text-shadow: 0 0 4px #64c59e;
+        }
+
+        /* 歌词区域样式 */
+        .section { position: relative; margin-bottom: 3rem; z-index: 2; }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            padding: 0.2rem 0.5rem 0.2rem 0;
+            transition: opacity 0.2s;
+            user-select: none;
+            flex-wrap: wrap;
+            overflow: visible;
+            width: 100%;
+        }
+        .section-title:hover .fold-icon { transform: scale(1.1); color: #64c59e; }
+        .section-title h2 {
+            font-size: inherit;
+            font-weight: 500;
+            background: linear-gradient(135deg, #64a8ce, #64c59e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+            letter-spacing: -0.01em;
+            white-space: normal;
+            word-break: keep-all;
+            line-height: 1.3;
+            transition: text-shadow 0.2s ease;
+        }
+        .fold-icon {
+            font-size: 1.25rem;
+            color: #64a8ce;
+            transition: transform 0.2s ease, color 0.2s, text-shadow 0.2s ease;
+            width: 1.6rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .section-intro-comment {
+            margin-left: 2.2rem;
+            margin-bottom: 1.5rem;
+            padding-left: 0.8rem;
+            border-left: 3px solid rgba(100, 168, 206, 0.6);
+            font-size: 0.92rem;
+            font-style: italic;
+            color: #cfe2e8;
+            background: rgba(20, 40, 45, 0.3);
+            border-radius: 0 12px 12px 0;
+            padding: 0.4rem 1rem;
+            width: fit-content;
+            max-width: 85%;
+            backdrop-filter: blur(2px);
+        }
+        .lyric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.6rem;
+        }
+        .cards-fold-wrapper { overflow: visible; }
+        .lyric-card {
+            background: rgba(18, 38, 42, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(100, 168, 206, 0.3);
+            padding: 1.5rem 1.4rem;
+            transition: all 0.3s cubic-bezier(0.2,0.9,0.4,1.1);
+            box-shadow: 0 10px 20px -8px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .lyric-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(100, 197, 158, 0.6);
+            background: rgba(28, 55, 60, 0.8);
+            box-shadow: 0 20px 32px -12px rgba(0,0,0,0.5);
+        }
+        .lyric-card::before {
+            content: '“';
+            font-family: serif;
+            font-size: 3.5rem;
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            opacity: 0.08;
+            color: #a8e0f0;
+            pointer-events: none;
+        }
+        .lyric-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .lyric-original {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #cbd8dc;
+            opacity: 1;
+            font-style: italic;
+            letter-spacing: -0.2px;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-left: 2px solid rgba(100, 168, 206, 0.4);
+            padding-left: 0.6rem;
+        }
+        .lyric-translated {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f5fffc;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+            letter-spacing: -0.1px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .lyric-translated.only-chinese {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f5fffc;
+            border-left: 2px solid rgba(100, 197, 158, 0.5);
+            padding-left: 0.6rem;
+        }
+        .lyric-text.narrative {
+            font-style: italic;
+            color: #cfe2e8;
+            border-left: 2px solid #64a8ce;
+            padding-left: 0.8rem;
+            font-size: 0.92rem;
+            display: block;
+        }
+        .song-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 0.75rem;
+            padding-top: 0.6rem;
+            border-top: 1px dashed rgba(100, 168, 206, 0.4);
+            font-size: 0.78rem;
+            color: #bdd4db;
+        }
+        .song-meta i { font-size: 0.7rem; color: #64c59e; }
+        .song-name {
+            font-family: monospace;
+            background: rgba(100, 168, 206, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 40px;
+        }
+        .spacer-dots {
+            text-align: center;
+            margin: 2rem 0 1rem;
+            opacity: 0.3;
+            letter-spacing: 6px;
+            font-size: 0.7rem;
+            color: #64a8ce;
+        }
+        /* 桌面端卡片宽度缩短 */
+        @media (min-width: 900px) {
+            .lyric-grid { grid-template-columns: 1fr; }
+            .lyric-card { max-width: 560px; margin: 0 auto 0 0; }
+            .section-intro-comment { max-width: 560px; margin-left: 0; margin-right: 0; }
+            .section-title { max-width: 560px; margin-left: 0; margin-right: 0; }
+        }
+        @media (max-width: 899px) {
+            .section-title { font-size: 1.8rem; padding-left: 0.5rem; }
+            .section-intro-comment { margin-left: 1rem; max-width: 90%; }
+            .lyric-card { max-width: 100%; }
+        }
+
+        /* 后记框样式 - 无段首空格，严格左对齐 */
+        .side-notes h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #64a8ce, #64c59e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(100, 168, 206, 0.5);
+            display: inline-block;
+        }
+        .postscript-block {
+            margin-bottom: 1.5rem;
+        }
+        .postscript-subtitle {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64c59e;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+        .postscript-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e0eef3;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 0.8rem 1rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-left: 2px solid #64c59e;
+            text-indent: 0;        /* 确保无首行缩进 */
+        }
+        .hero { text-align: center; margin-bottom: 2rem; position: relative; z-index: 2; }
+        .hero-tagline { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: #b9e2f0; border-top: 1px solid rgba(100, 168, 206, 0.4); border-bottom: 1px solid rgba(100, 168, 206, 0.4); display: inline-block; padding: 0.5rem 1.2rem; background: rgba(10, 30, 35, 0.5); backdrop-filter: blur(4px); border-radius: 60px; font-style: italic; }
+        .hero h1 { font-size: 3rem; font-weight: 500; font-family: 'Cormorant Garamond', serif; margin: 1rem 0 0.5rem; background: linear-gradient(120deg, #64a8ce, #64c59e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .floating-glow { position: absolute; width: 280px; height: 280px; background: radial-gradient(circle, rgba(100, 168, 206, 0.15) 0%, rgba(0,0,0,0) 70%); top: -80px; left: 50%; transform: translateX(-50%); pointer-events: none; border-radius: 50%; z-index: 0; }
+        .lyric-card { opacity: 0; animation: fadeSlideUp 0.45s ease forwards; }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 时间轴 -->
+    <div class="timeline-axis">
+        <div class="axis-dot"></div>
+        <div class="axis-hint"><i class="fas fa-hand-pointer"></i> 点击标题折叠/展开</div>
+    </div>
+
+    <div class="main-content">
+        <div class="hero">
+            <div class="floating-glow"></div>
+            <div class="hero-tagline">日推系列的打碎重组，和歌本身没有关系，也只是假装在叙述。</div>
+            <h1>拼贴话</h1>
+        </div>
+        <div id="app-root"></div>
+    </div>
+
+    <!-- 静态后记框（拆分“其一”“其二”，无段首空格） -->
+    <aside class="side-notes" id="notes-panel">
+        <h3><i class="fas fa-book-open"></i> 后记</h3>
+        <div class="postscript-block">
+            <div class="postscript-subtitle">其一</div>
+            <div class="postscript-content">
+总的来说，依旧是一时兴起的产物，跟日推本身差不多。
+
+因为想到真的发了很多莫名其妙的日推，也知道肯定没人听（毕竟自己也不听别人的朋友圈推歌），于是便想着废物利用，而文字是再好不过的方式。
+
+正如大标题，整个内容也不过是在歌词里翻找短句重新排序最后变成意识流，假装很文艺这样。
+
+虽然特意增加了引言来让内容在不展开的前提下也勉强能看出点什么。总之就是于夜晚陷入迷思再到逃入梦境，避无可避在白昼中醒来迎接新的季节，走向下一段旅程。
+
+假装很有小巧思的说法就是，这是毕业礼物。没人看的话就是只属于我自己的，有人就是送给看到的人的。
+
+文字不是重要的东西。文字可以被打磨被润色，对着屏幕敲下的文字看似是对网线外的他人对话，还是更像对名为他者的幻觉发表言论。
+
+认真的碎碎念很吓人不是么？
+
+总之，祝看到这个网站的人毕业快乐，反正只要足够狡辩，不是毕业季也可以陷入毕业的感知。
+            </div>
+        </div>
+        <div class="postscript-block">
+            <div class="postscript-subtitle">其二</div>
+            <div class="postscript-content">
+依旧一时兴起碎碎念。尽管代码没一个字是自己写的，我只是一个拿到名为ai的枪的猴子，制作过程中还是一度想放弃。
+
+很显然，这个东西非常之无聊，而本人也想不到什么让这东西更有趣一点的方法。
+
+当然我自己是稍微增加了一点难度的，因为我讨厌歌单放了一小段就切掉，所以配备音频来强势安利的方法从根源上被否定。而配备专辑封面图的路线尝试过，但有些吃网站制作功底最后摆烂作罢。
+
+事实上，支撑着没放弃这个项目只是因为已经串好了这些意识流伪叙述故事，烂掉之前也要祸害一下随机路人的眼睛。虽然并不是什么好东西，好歹也写了。
+
+虽然放弃掉更符合本人的精神状态——说穿了也就到季节的部分，正常状态下更是只到梦境。会有“前行”这一环不过是气氛到了。
+
+？唉，碎碎念得还是太吓人了，还是把网站设置成仅限一天的好了。
+            </div>
+        </div>
+    </aside>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 歌词序列数据 (已删除“拼贴画”和“结语”章节)
+    // --------------------------------------------------------------
+    const sectionsData = [
+        { title: "夜晚", items: [
+            { type: "intro", text: "直到夜晚来临——" },
+            { type: "lyric", text: "喉が焼け、夜が来ない \n 喉咙灼烧着，夜幕却仍未降临", song: "——愚者の行進" },
+            { type: "lyric", text: "夕暮れが迫る \n 黄昏临近", song: "——评论家" },
+            { type: "lyric", text: "雨が降って、夜を待って \n 雨水落下，静待黑夜", song: "——プロポーズ /propose(なとり)" },
+            { type: "lyric", text: "灰でむらさきに まみれた18時に \n 灰中染紫的十八时", song: "——hp" },
+            { type: "lyric", text: "夜の訪れ知らせる \n 将夜晚的到来宣告", song: "——蜜月アン・ドゥ・トロワ" },
+            { type: "lyric", text: "つま先に月明かり \n 月光洒在脚尖", song: "——Jane Doe" },
+            { type: "lyric", text: "黙って観ていた星たちでさえ   この一瞬だけ  手を叩くみたい \n 就连宁静观望的群星 在这独一无二的瞬间 似乎也拍起了手", song: "トワイライト·セレナーデ" },
+            { type: "lyric", text: "夜だけの温室で おやすみ \n 仅在夜晚的温室中 晚安 ", song: "温室魔法" },
+            { type: "lyric", text: "二度と明けない夜が全て攫っていく \n 不会再破晓的夜晚将一切慢慢夺走", song: "——プラネテス /行星" }
+        ] },
+        { title: "死亡", items: [
+            { type: "intro", text: "夜、溶于黑暗，与名为死亡的变体。" },
+            { type: "lyric", text: "生活をまだ羅列している  想像をまた枯らしている \n 只是徒然将这生活罗列起来  只是让想象力再次枯竭下去", song: "——植物になっていく /变成植物" },
+            { type: "lyric", text: "もの足りないから  停滞した残映にいざさらば \n 正因为有所欠缺  向着停滞的残影道永别吧", song: "——散り散り" },
+            { type: "lyric", text: "ここで 言って    穏やかな ままで 去って \n 就在这里 说出来吧  请就这样 平静地 离开吧 ", song: "——お勉強しといてよ /要好好学一下哦" },
+            { type: "lyric", text: "繰り返す  フラッシュバック?蝉の声?二度とは帰らぬ君 \n 闪现的一幕幕、蝉声、再不会回来的你", song: "——少女レイ /少女Rei" },
+            { type: "lyric", text: "灰すら遺らなくても \n 连灰烬都不曾留下", song: "——灰すら遺らなくても。 / 即使连灰烬都不曾留下。" },
+            { type: "lyric", text: "なんだかんだしちゃって幕は降り \n 这样那样总而言之帷幕就此落下", song: "——ころしちゃった! /杀死她啦！" }
+        ] },
+        { title: "遗忘", items: [
+            { type: "intro", text: "死亡与遗忘的区别是？" },
+            { type: "lyric", text: "流る　きのうが透明になっていく \n 流转的昨天 正逐渐变得透明", song: "——miroir" },
+            { type: "lyric", text: "往来を風が追い抜いていった  思い出のような気配があった \n 清风掠去往来不息  心有所感似如追忆", song: "——死生観にさよなら /向生死观告别" },
+            { type: "lyric", text: "忘れてしまったこと数えきれずに浮かんでは \n 忘却之事如数不尽般地浮上心头", song: "——透明 (Transparent)" },
+            { type: "lyric", text: "忘れてしまうよ　言葉や感触も    だから今だけは　思い出したいのだ \n 因为我们会忘记讲过的话 忘记触碰过的事  所以要趁现在把一切都回想起来", song: "——幽霊" },
+            { type: "lyric", text: "落ちた破片を片付ける姿見つめて立ち尽くす \n 收拾着掉落的碎片的样子只是看着呆立着", song: "——あなたはヒーロー /你是英雄" },
+            { type: "lyric", text: "故に 忘れてしまっても \n 即使因此 忘得一干二净也没关系", song: "——カトラリー /餐具" }
+        ] },
+        { title: "痛苦", items: [
+            { type: "intro", text: "尚未学会装作遗忘痛苦。" },
+            { type: "lyric", text: "「苦（くる）しまなくてはいけないよ」 \n 「必须要承受苦痛啊」", song: "——失踪前夜" },
+            { type: "lyric", text: "「此処はそんなに寒くは無いから」 \n 「这里也没有那么寒冷啊。」", song: "——深昏睡" },
+            { type: "lyric", text: "あわれな独り言を記している \n 记录下可悲的独白", song: "——熱異常" },
+            { type: "lyric", text: "成为我永远的叹息", song: "——塔与少女的无题诗" },
+            { type: "lyric", text: "散々な日々は変わらないわ \n 狼狈不堪的日子没有丝毫改变", song: "——フォニイ /phony" }
+        ] },
+        { title: "逃避", items: [
+            { type: "intro", text: "对名为现实与成长的痛苦尽力逃避。" },
+            { type: "lyric", text: "아닌 척해볼까 해도 There's an issue  \n 试着装作若无其事 但问题依然存在", song: "——GPT" },
+            { type: "lyric", text: "目隠しして逃げて、気付けば闇 \n 遮住双眼一味逃避，回过神来已是一片黑暗", song: "——再生" },
+            { type: "lyric", text: "眠そうな目 \n 困倦的双眼", song: "——プロポーズ /propose(内緒のピアス)" },
+            { type: "lyric", text: "殻は裸　駄法螺　混ぜらば \n 无遮挡的皮囊  混上一眼假的谎", song: "——WWW" },
+            { type: "lyric", text: "そうすれば 変わらないから \n 如此 永不改变吧", song: "——ツギハギスタッカート /拼凑的断音" },
+            { type: "lyric", text: "All you worries, my dear \n Are over, Over, Over", song: "——イガク /医学" },
+            { type: "lyric", text: "腐り落ちてしまう前にさ さよなら夏 \n 在这一切腐朽消散之前 再见了夏天", song: "——死别" },
+            { type: "lyric", text: "追いつけないまま大人になって \n 就这样未能追上，便已长大成人", song: "——ただ君に晴れ /只给予你的晴天" },
+            { type: "lyric", text: "(はい) はい謹んで \n (好的) 好的，恭敬从命", song: "——はいよろこんで /乐意效劳" },
+            { type: "lyric", text: "雨停在半空", song: "——半醒" },
+            { type: "lyric", text: "すんませんね。 \n 真是抱歉呢。", song: "——人マニア" },
+            { type: "lyric", text: "今日も願ってる     こないでこないで次の朝よ \n 今天也同样祈祷着   第二天的早晨不要到来", song: "——3時12分" }
+        ] },
+        { title: "梦境", items: [
+            { type: "intro", text: "在逃避的空白中故作思索地陷入梦境。" },
+            { type: "lyric", text: "さっき迄の憂鬱すら 上手く形容できない貴方へ \n 致迄今为止的忧郁  都不能很好地形容的你", song: "——happy endじゃ愛せない" },
+            { type: "lyric", text: "都会的灯火中 映照着无人问津的梦", song: "——Nightension" },
+            { type: "lyric", text: "拝啓 僕の願いよ 未来よ 絶え間無い後悔よ \n 敬启 我的愿望 未来 还有那未曾断绝的后悔", song: "——flos" },
+            { type: "lyric", text: "なかったことにしないで \n 请不要当作未曾发生", song: "——匙ノ咒" },
+            { type: "lyric", text: "魔法が解ける前に。 \n 在魔法解除之前", song: "——偏食" },
+            { type: "lyric", text: "等梦完醒来  再去收拾残骸", song: "——大眠" }
+        ] },
+        { title: "白昼", items: [
+            { type: "intro", text: "直到梦境被白昼打破——" },
+            { type: "lyric", text: "아침은 너무 멀어 \n 清晨还太过遥远", song: "——Ditto" },
+            { type: "lyric", text: "来不及寄给昨日的岛屿  明天即将来临", song: "——春日纪行" },
+            { type: "lyric", text: "Wish the days would pass \n 但愿时光飞逝", song: "——VOIDS" },
+            { type: "lyric", text: "晒干这一片蓝色", song: "——我的悲伤是水做的" },
+            { type: "lyric", text: "明日の光が世界を染めてく \n 明天的光明也依然照耀著世界", song: "——帝国少女" },
+            { type: "lyric", text: "散らかした日常を棚に戻して    喩うるならば、午後の陽だまりが \n 将散乱的日常放回架子上  若要比喻的话、午后的向阳处", song: "——天国" }
+        ] },
+        { title: "季节", items: [
+            { type: "intro", text: "携来阳光的白昼宣告季节。" },
+            { type: "lyric", text: "ここには誰もいない \n 这里谁都不在", song: "——春を告げる /宣告春天" },
+            { type: "lyric", text: "移る季節に \n 在这流转的季节里", song: "——氷水色" },
+            { type: "lyric", text: "越长大同行的人却越少 \n 世界变大 还是我们变小", song: "——丑马" },
+            { type: "lyric", text: "春の匂いはもう止む \n 春的气息已然消散", song: "——春泥棒 /偷春人" },
+            { type: "lyric", text: "春も夏も青く澄んだ群青も  僕には合わなかった \n 春天和夏天和澄澈的群青色  都与我并不相配", song: "——君が僕を嗤う日  /你嘲笑我的那天" },
+            { type: "lyric", text: "夏が遠くて \n 夏天逐渐远去", song: "——ヒッチコック /Hitchcock" },
+            { type: "lyric", text: "夏が去っても追慕は切だ \n 夏天就算不留痕迹地离开  追慕也是让人心切的", song: "——言って。 /说吧。" },
+            { type: "lyric", text: "この世界この季節に別れで満ちている \n 这个世界这个季节充满着别离", song: "——宣布死亡" }
+        ] },
+        { title: "前行", items: [
+            { type: "intro", text: "炎热的季节、晴朗的季节、离别的季节、前行的季节、或别的什么——" },
+            { type: "lyric", text: "この場所で途方に暮れて  \n 在这个走投无路的地方不知所措", song: "——Over Flow(er)" },
+            { type: "lyric", text: "躓いても間違ってでも  ここまで歩いて来たんだ \n 即使跌倒 即使走错路 我们也走到了这里", song: "——風のたより" },
+            { type: "lyric", text: "こんなだらけた暮らしで    案外しあわせなの \n 在这样的懒散日子里   却意外地感到幸福", song: "——seaglass" },
+            { type: "lyric", text: "生き続ける限り 永遠に \n 只要活着就永远 不会停歇", song: "——脆弱性" },
+            { type: "lyric", text: "なぞる誰かの言葉を  いつか要らなくなるまで \n 直到有一天你不再需要  重复别人的话语", song: "——文学讲义" },
+            { type: "lyric", text: "この歩みでしか僕じゃないなら    水辺で明日を待つわけには行かない \n 只能由我自己來踏出這一步  不能在水邊傻傻等待明天到來", song: "——Water Flower" }
+        ] }
+    ];
+
+    // ----- 通用工具函数 -----
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;').replace(/\n/g, '<br>');
+    }
+
+    // 歌词结构构建（原文 + 译文）
+    function buildLyricStructure(rawText) {
+        if (!rawText) return { html: '', isPureChinese: false };
+        if (rawText.includes('\n')) {
+            const parts = rawText.split('\n');
+            const original = parts[0].trim();
+            const translation = parts.slice(1).join('\n').trim();
+            if (translation.length > 0) {
+                return {
+                    html: `<div class="lyric-original">${escapeHtml(original)}</div><div class="lyric-translated">${escapeHtml(translation)}</div>`,
+                    isPureChinese: false
+                };
+            } else {
+                return { html: `<div class="lyric-translated only-chinese">${escapeHtml(original)}</div>`, isPureChinese: true };
+            }
+        } else {
+            return { html: `<div class="lyric-translated only-chinese">${escapeHtml(rawText)}</div>`, isPureChinese: true };
+        }
+    }
+    function refreshCardLyric(card, newText) {
+        const textDiv = card.querySelector('.lyric-text');
+        if (!textDiv) return;
+        const { html } = buildLyricStructure(newText);
+        textDiv.innerHTML = html;
+    }
+
+    // ----- 时间轴逻辑（含动态高度重算 + 标题发光特效）-----
+    let timelineAxis, axisDot;
+    function recalcAxisGeometry() {
+        if (!timelineAxis) return;
+        const firstTitle = document.querySelector('.section-title');
+        const lastSection = document.querySelector('.section:last-child');
+        if (!firstTitle || !lastSection) return;
+        const startTop = firstTitle.getBoundingClientRect().top + window.scrollY - 24;
+        const endBottom = lastSection.getBoundingClientRect().bottom + window.scrollY + 30;
+        timelineAxis.style.top = `${startTop}px`;
+        timelineAxis.style.height = `${endBottom - startTop}px`;
+    }
+    
+    // 高亮离圆点最近的标题
+    function highlightNearestTitle() {
+        if (!timelineAxis || !axisDot) return;
+        const titles = Array.from(document.querySelectorAll('.section-title'));
+        if (!titles.length) return;
+        const dotTop = parseFloat(axisDot.style.top);
+        if (isNaN(dotTop)) return;
+        const axisRect = timelineAxis.getBoundingClientRect();
+        const dotY = axisRect.top + dotTop + axisDot.offsetHeight/2;
+        let nearest = null;
+        let minDist = Infinity;
+        titles.forEach(title => {
+            const rect = title.getBoundingClientRect();
+            const titleCenterY = rect.top + rect.height/2;
+            const dist = Math.abs(titleCenterY - dotY);
+            if (dist < minDist) {
+                minDist = dist;
+                nearest = title;
+            }
+        });
+        titles.forEach(title => title.classList.remove('glow-title'));
+        if (nearest && minDist < 100) {
+            nearest.classList.add('glow-title');
+        }
+    }
+    
+    function refreshTimeline() {
+        if (!timelineAxis || !axisDot) return;
+        recalcAxisGeometry();
+        const axisRect = timelineAxis.getBoundingClientRect();
+        const axisHeight = axisRect.height;
+        const dotHeight = axisDot.offsetHeight;
+        const isAtBottom = (window.innerHeight + window.scrollY + 2) >= document.documentElement.scrollHeight;
+        const isAtTop = window.scrollY <= 2;
+        if (isAtTop) { axisDot.style.top = `0px`; highlightNearestTitle(); return; }
+        if (isAtBottom) { axisDot.style.top = `${Math.max(0, axisHeight - dotHeight)}px`; highlightNearestTitle(); return; }
+        const activeEl = getActiveElement();
+        if (!activeEl) { highlightNearestTitle(); return; }
+        const activeRect = activeEl.getBoundingClientRect();
+        const activeCenterY = activeRect.top + activeRect.height / 2;
+        const relativeY = activeCenterY - axisRect.top;
+        let clampedY = Math.min(Math.max(relativeY - dotHeight/2, 0), axisHeight - dotHeight);
+        if (isNaN(clampedY)) clampedY = 0;
+        axisDot.style.top = `${clampedY}px`;
+        highlightNearestTitle();
+    }
+    function getActiveElement() {
+        const candidates = Array.from(document.querySelectorAll('.section-title, .lyric-card'));
+        if (!candidates.length) return null;
+        const viewportCenterY = window.scrollY + window.innerHeight / 2;
+        let closest = null, minDist = Infinity;
+        for (const el of candidates) {
+            const rect = el.getBoundingClientRect();
+            const centerY = rect.top + rect.height/2 + window.scrollY;
+            const dist = Math.abs(centerY - viewportCenterY);
+            if (dist < minDist) { minDist = dist; closest = el; }
+        }
+        return closest;
+    }
+    let ticking = false;
+    function onScrollOrResize() {
+        if (!ticking) {
+            requestAnimationFrame(() => { refreshTimeline(); ticking = false; });
+            ticking = true;
+        }
+    }
+
+    // ----- 歌词区域渲染 -----
+    function renderSections() {
+        const root = document.getElementById('app-root');
+        if (!root) return;
+        root.innerHTML = '';
+        sectionsData.forEach((section, secIdx) => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'section';
+            const titleEl = document.createElement('div');
+            titleEl.className = 'section-title';
+            titleEl.innerHTML = `<span class="fold-icon"></span><h2>${escapeHtml(section.title)}</h2>`;
+            sectionDiv.appendChild(titleEl);
+            let gridItems = [];
+            const flushGrid = () => {
+                if (gridItems.length) {
+                    const grid = document.createElement('div');
+                    grid.className = 'lyric-grid';
+                    gridItems.forEach(card => grid.appendChild(card));
+                    sectionDiv.appendChild(grid);
+                    gridItems = [];
+                }
+            };
+            for (let item of section.items) {
+                if (item.type === 'intro') {
+                    flushGrid();
+                    const comment = document.createElement('div');
+                    comment.className = 'section-intro-comment';
+                    comment.innerHTML = `<i class="fas fa-quote-left" style="margin-right: 8px; font-size: 0.8rem; opacity: 0.7;"></i> ${escapeHtml(item.text)}`;
+                    sectionDiv.appendChild(comment);
+                } else if (item.type === 'lyric') {
+                    const card = document.createElement('div');
+                    card.className = 'lyric-card';
+                    card._dataRef = item;
+                    const textDiv = document.createElement('div');
+                    textDiv.className = 'lyric-text';
+                    const { html } = buildLyricStructure(item.text);
+                    textDiv.innerHTML = html;
+                    card.appendChild(textDiv);
+                    if (item.song) {
+                        const metaDiv = document.createElement('div');
+                        metaDiv.className = 'song-meta';
+                        metaDiv.innerHTML = `<i class="fas fa-microphone-alt"></i><span class="song-name">✦ ${escapeHtml(item.song)}</span>`;
+                        card.appendChild(metaDiv);
+                    } else {
+                        textDiv.classList.add('narrative');
+                    }
+                    card.addEventListener('dblclick', (e) => {
+                        e.stopPropagation();
+                        const data = card._dataRef;
+                        if (!data) return;
+                        let newText = prompt('编辑歌词内容（支持换行，可用 \\n 分隔原文与译文）:', data.text);
+                        if (newText !== null && newText.trim() !== '') {
+                            data.text = newText.trim();
+                            refreshCardLyric(card, data.text);
+                        }
+                        let currentSong = data.song || '';
+                        let newSong = prompt('编辑歌曲名（可留空）:', currentSong);
+                        if (newSong !== null) {
+                            if (newSong.trim() === '') {
+                                data.song = null;
+                                const metaArea = card.querySelector('.song-meta');
+                                if (metaArea) metaArea.remove();
+                                const textDivInner = card.querySelector('.lyric-text');
+                                if (textDivInner) textDivInner.classList.add('narrative');
+                            } else {
+                                data.song = newSong.trim();
+                                let metaArea = card.querySelector('.song-meta');
+                                if (metaArea) {
+                                    metaArea.innerHTML = `<i class="fas fa-microphone-alt"></i><span class="song-name">✦ ${escapeHtml(data.song)}</span>`;
+                                } else {
+                                    const newMeta = document.createElement('div');
+                                    newMeta.className = 'song-meta';
+                                    newMeta.innerHTML = `<i class="fas fa-microphone-alt"></i><span class="song-name">✦ ${escapeHtml(data.song)}</span>`;
+                                    card.appendChild(newMeta);
+                                }
+                                const textDivInner = card.querySelector('.lyric-text');
+                                if (textDivInner) textDivInner.classList.remove('narrative');
+                            }
+                        }
+                        refreshTimeline();
+                    });
+                    gridItems.push(card);
+                }
+            }
+            flushGrid();
+            root.appendChild(sectionDiv);
+            if (secIdx !== sectionsData.length - 1) {
+                const spacer = document.createElement('div');
+                spacer.className = 'spacer-dots';
+                spacer.innerHTML = '✧  ✧  ✧';
+                root.appendChild(spacer);
+            }
+        });
+    }
+
+    function setupFoldFeatures() {
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(section => {
+            const grid = section.querySelector('.lyric-grid');
+            if (!grid) return;
+            if (grid.parentElement && grid.parentElement.classList.contains('cards-fold-wrapper')) return;
+            const wrapper = document.createElement('div');
+            wrapper.className = 'cards-fold-wrapper';
+            grid.parentNode.insertBefore(wrapper, grid);
+            wrapper.appendChild(grid);
+            const titleDiv = section.querySelector('.section-title');
+            if (!titleDiv) return;
+            const iconSpan = titleDiv.querySelector('.fold-icon');
+            if (iconSpan) iconSpan.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            wrapper.style.display = 'none';
+            let expanded = false;
+            const toggleFold = (e) => {
+                e.stopPropagation();
+                if (expanded) {
+                    wrapper.style.display = 'none';
+                    if (iconSpan) iconSpan.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                    expanded = false;
+                } else {
+                    wrapper.style.display = 'block';
+                    if (iconSpan) iconSpan.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                    expanded = true;
+                }
+                setTimeout(() => { refreshTimeline(); }, 30);
+                refreshTimeline();
+            };
+            titleDiv.style.cursor = 'pointer';
+            titleDiv.addEventListener('click', toggleFold);
+        });
+        refreshTimeline();
+    }
+
+    // ----- 初始化所有 -----
+    function init() {
+        renderSections();
+        setupFoldFeatures();
+        timelineAxis = document.querySelector('.timeline-axis');
+        axisDot = document.querySelector('.axis-dot');
+        if (timelineAxis && axisDot) {
+            recalcAxisGeometry();
+            refreshTimeline();
+            window.addEventListener('load', () => { recalcAxisGeometry(); refreshTimeline(); });
+            window.addEventListener('scroll', onScrollOrResize);
+            window.addEventListener('resize', () => { recalcAxisGeometry(); onScrollOrResize(); });
+        }
+    }
+    init();
+</script>
+</body>
+</html>
