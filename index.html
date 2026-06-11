@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>碎镜重组 · 歌词序列诗 | 后记 · 蓝绿变奏</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -14,296 +15,104 @@
             color: #eef2ff;
             line-height: 1.5;
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1a2a2e; border-radius: 8px; }
         ::-webkit-scrollbar-thumb { background: #64a8ce; border-radius: 8px; }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 5rem;
-            position: relative;
-        }
-
-        /* 桌面端布局：主内容左移避开时间轴，后记区宽度增加 */
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem 5rem; position: relative; }
         @media (min-width: 900px) {
-            .container {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 2rem;
-                justify-content: space-between;
-                align-items: flex-start;
-            }
-            .main-content {
-                flex: 2;
-                min-width: 0;
-                width: 0;
-                margin-left: 2.8rem;
-            }
-            .side-notes {
-                flex: 0.9;
-                min-width: 260px;
-                max-width: 340px;
-                margin-top: 6rem;
-                background: rgba(25, 45, 50, 0.4);
-                backdrop-filter: blur(12px);
-                border-radius: 28px;
-                padding: 1.5rem 1.2rem;
-                border: 1px solid rgba(100, 168, 206, 0.3);
-                box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-                transition: all 0.2s;
-                position: static;
-            }
+            .container { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: flex-start; }
+            .main-content { flex: 2; min-width: 0; width: 0; margin-left: 2.8rem; }
+            .side-notes { flex: 0.9; min-width: 260px; max-width: 340px; margin-top: 6rem; background: rgba(25,45,50,0.4); backdrop-filter: blur(12px); border-radius: 28px; padding: 1.5rem 1.2rem; border: 1px solid rgba(100,168,206,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: all 0.2s; position: static; }
         }
-
-        /* 移动端：后记区放在主内容之后 */
         @media (max-width: 899px) {
-            .container {
-                display: flex;
-                flex-direction: column;
-            }
-            .side-notes {
-                order: 10;
-                margin-top: 2rem;
-                background: rgba(25, 45, 50, 0.4);
-                backdrop-filter: blur(12px);
-                border-radius: 28px;
-                padding: 1.5rem 1.2rem;
-                border: 1px solid rgba(100, 168, 206, 0.3);
-            }
+            .container { display: flex; flex-direction: column; }
+            .side-notes { order: 10; margin-top: 2rem; background: rgba(25,45,50,0.4); backdrop-filter: blur(12px); border-radius: 28px; padding: 1.5rem 1.2rem; border: 1px solid rgba(100,168,206,0.3); }
         }
-
-        /* 时间轴 - 蓝绿渐变 */
         .timeline-axis {
-            position: absolute;
-            left: 2rem;
-            top: 180px;
-            width: 4px;
-            background: linear-gradient(180deg, 
-                rgba(100, 168, 206, 0.2) 0%,
-                rgba(100, 197, 158, 0.8) 30%,
-                rgba(100, 197, 158, 0.8) 70%,
-                rgba(100, 168, 206, 0.2) 100%);
-            z-index: 10;
-            pointer-events: none;
-            border-radius: 4px;
-            box-shadow: 0 0 8px rgba(100, 168, 206, 0.4), inset 0 0 2px rgba(100, 197, 158, 0.6);
+            position: absolute; left: 2rem; top: 180px; width: 4px;
+            background: linear-gradient(180deg, rgba(100,168,206,0.2) 0%, rgba(100,197,158,0.8) 30%, rgba(100,197,158,0.8) 70%, rgba(100,168,206,0.2) 100%);
+            z-index: 10; pointer-events: none; border-radius: 4px;
+            box-shadow: 0 0 8px rgba(100,168,206,0.4), inset 0 0 2px rgba(100,197,158,0.6);
             transition: height 0.2s ease, top 0.2s ease;
         }
         .axis-dot {
-            position: absolute;
-            left: -5px;
-            width: 14px;
-            height: 14px;
+            position: absolute; left: -5px; width: 14px; height: 14px;
             background: radial-gradient(circle, #a0e0c0, #64c59e);
-            border: 2px solid #e6fffa;
-            border-radius: 50%;
-            box-shadow: 0 0 0 3px rgba(100, 197, 158, 0.5), 0 0 15px 2px #64a8ce;
-            transition: top 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            z-index: 15;
-            pointer-events: none;
-            opacity: 1;
+            border: 2px solid #e6fffa; border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(100,197,158,0.5), 0 0 15px 2px #64a8ce;
+            transition: top 0.35s cubic-bezier(0.2,0.9,0.4,1.1);
+            z-index: 15; pointer-events: none; opacity: 1;
         }
         .axis-hint {
-            position: absolute;
-            left: 16px;
-            top: -28px;
-            white-space: nowrap;
-            font-size: 0.7rem;
-            font-weight: 400;
-            font-family: 'Inter', sans-serif;
-            color: #cae9ff;
-            background: rgba(10, 30, 35, 0.7);
-            backdrop-filter: blur(6px);
-            padding: 4px 10px;
-            border-radius: 40px;
-            border: 1px solid rgba(100, 168, 206, 0.5);
-            letter-spacing: 0.3px;
-            pointer-events: none;
-            z-index: 12;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            position: absolute; left: 16px; top: -28px; white-space: nowrap;
+            font-size: 0.7rem; font-weight: 400; font-family: 'Inter', sans-serif;
+            color: #cae9ff; background: rgba(10,30,35,0.7); backdrop-filter: blur(6px);
+            padding: 4px 10px; border-radius: 40px; border: 1px solid rgba(100,168,206,0.5);
+            letter-spacing: 0.3px; pointer-events: none; z-index: 12; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
-        .axis-hint i { font-size: 0.65rem; margin-right: 6px; color: #64c59e; }
+        .axis-hint svg { vertical-align: middle; margin-right: 6px; color: #64c59e; }
         @media (max-width: 780px) {
             .timeline-axis { left: 1.2rem; width: 3px; }
             .axis-dot { left: -5px; width: 11px; height: 11px; }
             .axis-hint { left: 12px; top: -24px; font-size: 0.6rem; padding: 3px 8px; }
             .main-content { margin-left: 0 !important; }
         }
-
-        /* 强化后的标题发光特效 (轴上点靠近时) */
-        .section-title.glow-title h2 {
-            text-shadow: 0 0 12px #64c59e, 0 0 20px #64a8ce, 0 0 6px rgba(100, 200, 180, 0.8);
-            transition: text-shadow 0.2s ease;
-        }
-        .section-title.glow-title .fold-icon {
-            color: #b3ffea;
-            text-shadow: 0 0 8px #64c59e, 0 0 12px #64a8ce;
-            transform: scale(1.05);
-        }
-
-        /* 歌词区域样式 */
+        .section-title.glow-title h2 { text-shadow: 0 0 12px #64c59e, 0 0 20px #64a8ce, 0 0 6px rgba(100,200,180,0.8); transition: text-shadow 0.2s ease; }
+        .section-title.glow-title .fold-icon { color: #b3ffea; text-shadow: 0 0 8px #64c59e, 0 0 12px #64a8ce; transform: scale(1.05); }
         .section { position: relative; margin-bottom: 3rem; z-index: 2; }
         .section-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            padding: 0.2rem 0.5rem 0.2rem 0;
-            transition: opacity 0.2s;
-            user-select: none;
-            flex-wrap: wrap;
-            overflow: visible;
-            width: 100%;
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
+            font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 500;
+            margin-bottom: 0.5rem; padding: 0.2rem 0.5rem 0.2rem 0; transition: opacity 0.2s;
+            user-select: none; flex-wrap: wrap; overflow: visible; width: 100%;
         }
+        .section-title:focus-visible { outline: 2px solid #64c59e; outline-offset: 4px; border-radius: 4px; }
         .section-title:hover .fold-icon { transform: scale(1.1); color: #64c59e; }
         .section-title h2 {
-            font-size: inherit;
-            font-weight: 500;
+            font-size: inherit; font-weight: 500;
             background: linear-gradient(135deg, #64a8ce, #64c59e);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin: 0;
-            letter-spacing: -0.01em;
-            white-space: normal;
-            word-break: keep-all;
-            line-height: 1.3;
-            transition: text-shadow 0.2s ease;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            margin: 0; letter-spacing: -0.01em; white-space: normal; word-break: keep-all;
+            line-height: 1.3; transition: text-shadow 0.2s ease;
         }
         .fold-icon {
-            font-size: 1.25rem;
-            color: #64a8ce;
+            font-size: 1.25rem; color: #64a8ce;
             transition: transform 0.2s ease, color 0.2s, text-shadow 0.2s ease;
-            width: 1.6rem;
-            text-align: center;
-            flex-shrink: 0;
+            width: 1.6rem; text-align: center; flex-shrink: 0;
+            display: inline-flex; align-items: center; justify-content: center;
         }
+        .fold-icon svg { width: 1em; height: 1em; }
         .section-intro-comment {
-            margin-left: 2.2rem;
-            margin-bottom: 1.5rem;
-            padding-left: 0.8rem;
-            border-left: 3px solid rgba(100, 168, 206, 0.6);
-            font-size: 0.92rem;
-            font-style: italic;
-            color: #cfe2e8;
-            background: rgba(20, 40, 45, 0.3);
-            border-radius: 0 12px 12px 0;
-            padding: 0.4rem 1rem;
-            width: fit-content;
-            max-width: 85%;
-            backdrop-filter: blur(2px);
+            margin-left: 2.2rem; margin-bottom: 1.5rem; padding-left: 0.8rem;
+            border-left: 3px solid rgba(100,168,206,0.6); font-size: 0.92rem;
+            font-style: italic; color: #cfe2e8; background: rgba(20,40,45,0.3);
+            border-radius: 0 12px 12px 0; padding: 0.4rem 1rem;
+            width: fit-content; max-width: 85%; backdrop-filter: blur(2px);
         }
-        .lyric-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.6rem;
-        }
+        .lyric-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.6rem; }
         .cards-fold-wrapper { overflow: visible; }
         .lyric-card {
-            background: rgba(18, 38, 42, 0.65);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            border: 1px solid rgba(100, 168, 206, 0.3);
-            padding: 1.5rem 1.4rem;
+            background: rgba(18,38,42,0.65); backdrop-filter: blur(12px); border-radius: 32px;
+            border: 1px solid rgba(100,168,206,0.3); padding: 1.5rem 1.4rem;
             transition: all 0.3s cubic-bezier(0.2,0.9,0.4,1.1);
-            box-shadow: 0 10px 20px -8px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+            box-shadow: 0 10px 20px -8px rgba(0,0,0,0.3); position: relative; overflow: hidden;
         }
         .lyric-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(100, 197, 158, 0.6);
-            background: rgba(28, 55, 60, 0.8);
-            box-shadow: 0 20px 32px -12px rgba(0,0,0,0.5);
+            transform: translateY(-6px); border-color: rgba(100,197,158,0.6);
+            background: rgba(28,55,60,0.8); box-shadow: 0 20px 32px -12px rgba(0,0,0,0.5);
         }
-        .lyric-card::before {
-            content: '“';
-            font-family: serif;
-            font-size: 3.5rem;
-            position: absolute;
-            top: -10px;
-            left: 12px;
-            opacity: 0.08;
-            color: #a8e0f0;
-            pointer-events: none;
-        }
-        .lyric-text {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .lyric-original {
-            font-size: 0.85rem;
-            font-weight: 400;
-            color: #cbd8dc;
-            opacity: 1;
-            font-style: italic;
-            letter-spacing: -0.2px;
-            line-height: 1.45;
-            white-space: pre-wrap;
-            word-break: break-word;
-            border-left: 2px solid rgba(100, 168, 206, 0.4);
-            padding-left: 0.6rem;
-        }
-        .lyric-translated {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #f5fffc;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            word-break: break-word;
-            letter-spacing: -0.1px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        .lyric-translated.only-chinese {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #f5fffc;
-            border-left: 2px solid rgba(100, 197, 158, 0.5);
-            padding-left: 0.6rem;
-        }
-        .lyric-text.narrative {
-            font-style: italic;
-            color: #cfe2e8;
-            border-left: 2px solid #64a8ce;
-            padding-left: 0.8rem;
-            font-size: 0.92rem;
-            display: block;
-        }
-        .song-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 0.75rem;
-            padding-top: 0.6rem;
-            border-top: 1px dashed rgba(100, 168, 206, 0.4);
-            font-size: 0.78rem;
-            color: #bdd4db;
-        }
-        .song-meta i { font-size: 0.7rem; color: #64c59e; }
-        .song-name {
-            font-family: monospace;
-            background: rgba(100, 168, 206, 0.15);
-            padding: 0.2rem 0.5rem;
-            border-radius: 40px;
-        }
-        .spacer-dots {
-            text-align: center;
-            margin: 2rem 0 1rem;
-            opacity: 0.3;
-            letter-spacing: 6px;
-            font-size: 0.7rem;
-            color: #64a8ce;
-        }
-        /* 桌面端卡片宽度缩短 */
+        .lyric-card::before { content: '\201c'; font-family: serif; font-size: 3.5rem; position: absolute; top: -10px; left: 12px; opacity: 0.08; color: #a8e0f0; pointer-events: none; }
+        .lyric-text { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+        .lyric-original { font-size: 0.85rem; font-weight: 400; color: #cbd8dc; opacity: 1; font-style: italic; letter-spacing: -0.2px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; border-left: 2px solid rgba(100,168,206,0.4); padding-left: 0.6rem; }
+        .lyric-translated { font-size: 1rem; font-weight: 600; color: #f5fffc; line-height: 1.5; white-space: pre-wrap; word-break: break-word; letter-spacing: -0.1px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .lyric-translated.only-chinese { font-size: 1rem; font-weight: 600; color: #f5fffc; border-left: 2px solid rgba(100,197,158,0.5); padding-left: 0.6rem; }
+        .lyric-text.narrative { font-style: italic; color: #cfe2e8; border-left: 2px solid #64a8ce; padding-left: 0.8rem; font-size: 0.92rem; display: block; }
+        .song-meta { display: flex; align-items: center; gap: 8px; margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed rgba(100,168,206,0.4); font-size: 0.78rem; color: #bdd4db; }
+        .song-meta svg { color: #64c59e; flex-shrink: 0; }
+        .song-name { font-family: monospace; background: rgba(100,168,206,0.15); padding: 0.2rem 0.5rem; border-radius: 40px; }
+        .spacer-dots { text-align: center; margin: 2rem 0 1rem; opacity: 0.3; letter-spacing: 6px; font-size: 0.7rem; color: #64a8ce; }
         @media (min-width: 900px) {
             .lyric-grid { grid-template-columns: 1fr; }
             .lyric-card { max-width: 560px; margin: 0 auto 0 0; }
@@ -315,117 +124,122 @@
             .section-intro-comment { margin-left: 1rem; max-width: 90%; }
             .lyric-card { max-width: 100%; }
         }
-
-        /* 后记框样式 - 带遮罩 */
-        .side-notes h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 500;
-            background: linear-gradient(135deg, #64a8ce, #64c59e);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid rgba(100, 168, 206, 0.5);
-            display: inline-block;
+        .toolbar-row { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+        .toggle-all-btn {
+            background: rgba(25,45,50,0.6); backdrop-filter: blur(8px);
+            border: 1px solid rgba(100,168,206,0.4); color: #cae9ff;
+            padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.82rem;
+            font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.2s ease;
+            display: inline-flex; align-items: center; gap: 6px;
         }
-        .notes-container {
-            position: relative;
+        .toggle-all-btn:hover { background: rgba(40,70,75,0.8); border-color: rgba(100,197,158,0.7); color: #e6fffa; box-shadow: 0 0 12px rgba(100,168,206,0.3); }
+        .toggle-all-btn:focus-visible { outline: 2px solid #64c59e; outline-offset: 3px; }
+        .toggle-all-btn svg { width: 0.9em; height: 0.9em; }
+        .nav-float {
+            position: fixed; bottom: 28px; right: 28px; z-index: 999;
+            display: flex; flex-direction: column; gap: 8px;
+            opacity: 0; transform: translateY(12px);
+            transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none;
         }
-        .postscript-content-wrapper {
-            transition: filter 0.3s ease;
+        .nav-float.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .nav-btn {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(18,38,42,0.8); backdrop-filter: blur(12px);
+            border: 1px solid rgba(100,168,206,0.5); color: #cae9ff;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
         }
-        /* 遮罩层样式 */
+        .nav-btn:hover { background: rgba(40,70,75,0.9); border-color: rgba(100,197,158,0.8); color: #e6fffa; transform: scale(1.08); }
+        .nav-btn:focus-visible { outline: 2px solid #64c59e; outline-offset: 3px; }
+        .nav-btn svg { width: 1.2em; height: 1.2em; }
+        .nav-panel {
+            position: fixed; bottom: 88px; right: 28px; z-index: 998;
+            background: rgba(15,32,36,0.92); backdrop-filter: blur(16px);
+            border: 1px solid rgba(100,168,206,0.4); border-radius: 20px;
+            padding: 0.8rem 0; min-width: 180px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            opacity: 0; transform: translateY(8px) scale(0.95);
+            transition: opacity 0.2s ease, transform 0.2s ease; pointer-events: none;
+            max-height: 70vh; overflow-y: auto;
+        }
+        .nav-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .nav-panel-item {
+            display: block; padding: 0.5rem 1.2rem; font-size: 0.85rem;
+            color: #cfe2e8; cursor: pointer; transition: all 0.15s ease;
+            border: none; background: none; width: 100%; text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-panel-item:hover, .nav-panel-item:focus { background: rgba(100,168,206,0.2); color: #e6fffa; }
+        .nav-panel-item:focus-visible { outline: 2px solid #64c59e; outline-offset: -2px; }
+        .nav-panel-item svg { width: 0.75em; height: 0.75em; margin-right: 8px; color: #64c59e; }
+        .side-notes h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; background: linear-gradient(135deg, #64a8ce, #64c59e); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 1rem; border-bottom: 1px solid rgba(100,168,206,0.5); display: inline-block; }
+        .side-notes h3 svg { vertical-align: middle; margin-right: 6px; color: #64c59e; width: 1em; height: 1em; }
+        .notes-container { position: relative; }
+        .postscript-content-wrapper { transition: filter 0.3s ease; }
         .notes-mask {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 30, 35, 0.85);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            cursor: pointer;
-            z-index: 5;
-            transition: all 0.2s ease;
-            border: 1px solid rgba(100, 168, 206, 0.4);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10,30,35,0.85); backdrop-filter: blur(8px);
+            border-radius: 20px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 0.8rem;
+            cursor: pointer; z-index: 5; transition: all 0.2s ease;
+            border: 1px solid rgba(100,168,206,0.4); box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
-        .notes-mask i {
-            font-size: 2rem;
-            color: #64c59e;
-            filter: drop-shadow(0 0 6px #64a8ce);
+        .notes-mask:focus-visible { outline: 2px solid #64c59e; outline-offset: 4px; }
+        .notes-mask svg { width: 2rem; height: 2rem; color: #64c59e; filter: drop-shadow(0 0 6px #64a8ce); }
+        .notes-mask span { font-size: 0.9rem; color: #e0f0f5; background: rgba(0,0,0,0.3); padding: 0.3rem 1rem; border-radius: 40px; letter-spacing: 1px; }
+        .notes-mask:hover { background: rgba(10,30,35,0.75); backdrop-filter: blur(10px); }
+        .re-mask-btn {
+            display: inline-block; margin-top: 0.8rem;
+            background: rgba(25,45,50,0.5); backdrop-filter: blur(6px);
+            border: 1px solid rgba(100,168,206,0.4); color: #b9dce8;
+            padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.78rem;
+            cursor: pointer; transition: all 0.2s ease; font-family: 'Inter', sans-serif;
         }
-        .notes-mask span {
-            font-size: 0.9rem;
-            color: #e0f0f5;
-            background: rgba(0,0,0,0.3);
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            letter-spacing: 1px;
-        }
-        .notes-mask:hover {
-            background: rgba(10, 30, 35, 0.75);
-            backdrop-filter: blur(10px);
-        }
-        .postscript-block {
-            margin-bottom: 1.5rem;
-        }
-        .postscript-subtitle {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #64c59e;
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
-        }
-        .postscript-content {
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: #e0eef3;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-            padding: 0.8rem 1rem;
-            white-space: pre-wrap;
-            word-break: break-word;
-            border-left: 2px solid #64c59e;
-            text-indent: 0;
-        }
+        .re-mask-btn:hover { background: rgba(40,70,75,0.7); border-color: rgba(100,197,158,0.7); color: #e6fffa; }
+        .re-mask-btn:focus-visible { outline: 2px solid #64c59e; outline-offset: 3px; }
+        .postscript-block { margin-bottom: 1.5rem; }
+        .postscript-subtitle { font-size: 0.9rem; font-weight: 600; color: #64c59e; margin-bottom: 0.5rem; letter-spacing: 1px; }
+        .postscript-content { font-size: 0.85rem; line-height: 1.6; color: #e0eef3; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 0.8rem 1rem; white-space: pre-wrap; word-break: break-word; border-left: 2px solid #64c59e; text-indent: 0; }
         .hero { text-align: center; margin-bottom: 2rem; position: relative; z-index: 2; }
-        .hero-tagline { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: #b9e2f0; border-top: 1px solid rgba(100, 168, 206, 0.4); border-bottom: 1px solid rgba(100, 168, 206, 0.4); display: inline-block; padding: 0.5rem 1.2rem; background: rgba(10, 30, 35, 0.5); backdrop-filter: blur(4px); border-radius: 60px; font-style: italic; }
+        .hero-tagline { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: #b9e2f0; border-top: 1px solid rgba(100,168,206,0.4); border-bottom: 1px solid rgba(100,168,206,0.4); display: inline-block; padding: 0.5rem 1.2rem; background: rgba(10,30,35,0.5); backdrop-filter: blur(4px); border-radius: 60px; font-style: italic; }
         .hero h1 { font-size: 3rem; font-weight: 500; font-family: 'Cormorant Garamond', serif; margin: 1rem 0 0.5rem; background: linear-gradient(120deg, #64a8ce, #64c59e); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .floating-glow { position: absolute; width: 280px; height: 280px; background: radial-gradient(circle, rgba(100, 168, 206, 0.15) 0%, rgba(0,0,0,0) 70%); top: -80px; left: 50%; transform: translateX(-50%); pointer-events: none; border-radius: 50%; z-index: 0; }
+        .floating-glow { position: absolute; width: 280px; height: 280px; background: radial-gradient(circle, rgba(100,168,206,0.15) 0%, rgba(0,0,0,0) 70%); top: -80px; left: 50%; transform: translateX(-50%); pointer-events: none; border-radius: 50%; z-index: 0; }
         .lyric-card { opacity: 0; animation: fadeSlideUp 0.45s ease forwards; }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 600px) { .nav-float { bottom: 16px; right: 16px; } .nav-btn { width: 38px; height: 38px; } .nav-panel { right: 16px; bottom: 74px; min-width: 150px; } }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- 时间轴 -->
     <div class="timeline-axis">
         <div class="axis-dot"></div>
-        <div class="axis-hint"><i class="fas fa-hand-pointer"></i> 点击标题折叠/展开</div>
+        <div class="axis-hint">
+            <svg viewBox="0 0 24 24" width="0.75em" height="0.75em" fill="currentColor"><path d="M13.5 2C12.12 2 11 3.12 11 4.5V8.5C11 8.78 10.78 9 10.5 9C10.22 9 10 8.78 10 8.5V5.5C10 4.12 8.88 3 7.5 3S5 4.12 5 5.5V12.5L3.44 10.92C2.84 10.32 1.88 10.27 1.22 10.83C.531 11.41.5 12.44 1.08 13.06L5.72 18.14C6.78 19.28 8.27 20 9.97 20H16.5C18.71 20 20.5 18.21 20.5 16V8C20.5 6.62 19.38 5.5 18 5.5C17.22 5.5 16.53 5.84 16.06 6.36C15.78 4.89 14.5 3.75 13 3.75C12.81 3.75 12.63 3.77 12.45 3.81C12.05 2.72 10.89 2 9.5 2H13.5z"/></svg>
+            点击标题折叠/展开
+        </div>
     </div>
-
     <div class="main-content">
         <div class="hero">
             <div class="floating-glow"></div>
             <div class="hero-tagline">日推系列的打碎重组，和歌本身没有关系，也只是假装在叙述。</div>
             <h1>拼贴话</h1>
         </div>
+        <div class="toolbar-row">
+            <button class="toggle-all-btn" id="toggleAllBtn" tabindex="0" aria-label="全部展开或收起">
+                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                全部展开
+            </button>
+        </div>
         <div id="app-root"></div>
     </div>
-
-    <!-- 后记带遮罩 -->
     <aside class="side-notes" id="notes-panel">
-        <h3><i class="fas fa-book-open"></i> 后记</h3>
+        <h3>
+            <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M13 3C13 3 11 5 8 5S3 3 3 3V17C3 17 6 19 10 19S17 17 17 17V3zM19 3V17C19 17 21 19 23 19V3C21 3 19 3 19 3z"/></svg>
+            后记
+        </h3>
         <div class="notes-container" id="notes-container">
-            <div class="notes-mask" id="notes-mask">
-                <i class="fas fa-lock-open"></i>
+            <div class="notes-mask" id="notes-mask" tabindex="0" role="button" aria-label="点击查看后记">
+                <svg viewBox="0 0 24 24" width="2rem" height="2rem" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/></svg>
                 <span>点击查看后记</span>
             </div>
             <div class="postscript-content-wrapper" id="postscript-wrapper" style="filter: blur(4px); opacity: 0.6;">
@@ -460,385 +274,138 @@
 
 事实上，支撑着没放弃这个项目只是因为已经串好了这些意识流伪叙述故事，烂掉之前也要祸害一下随机路人的眼睛。虽然并不是什么好东西，好歹也写了。
 
-虽然放弃掉更符合本人的精神状态——说穿了也就到季节的部分，正常状态下更是只到梦境。会有“前行”这一环不过是气氛到了。
+虽然放弃掉更符合本人的精神状态——说穿了也就到季节的部分，正常状态下更是只到梦境。会有&quot;前行&quot;这一环不过是气氛到了。
 
 ？唉，碎碎念得还是太吓人了，还是把网站设置成仅限一天的好了。
                     </div>
                 </div>
+                <button class="re-mask-btn" id="reMaskBtn" tabindex="0" style="display:none;">
+                    <svg viewBox="0 0 24 24" width="0.8em" height="0.8em" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    重新遮蔽
+                </button>
             </div>
         </div>
     </aside>
 </div>
 
+<div class="nav-float" id="navFloat">
+    <div class="nav-panel" id="navPanel"></div>
+    <button class="nav-btn" id="navToggle" tabindex="0" aria-label="打开目录" title="章节目录">
+        <svg viewBox="0 0 24 24" width="1.2em" height="1.2em" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+    </button>
+    <button class="nav-btn" id="navTop" tabindex="0" aria-label="回到顶部" title="回到顶部">
+        <svg viewBox="0 0 24 24" width="1.2em" height="1.2em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5m-7 7l7-7 7 7"/></svg>
+    </button>
+</div>
+
 <script>
-    // --------------------------------------------------------------
-    // 歌词序列数据 (已删除“拼贴画”和“结语”章节)
-    // --------------------------------------------------------------
-    const sectionsData = [
-        { title: "夜晚", items: [
-            { type: "intro", text: "直到夜晚来临——" },
-            { type: "lyric", text: "喉が焼け、夜が来ない \n 喉咙灼烧着，夜幕却仍未降临", song: "——愚者の行進" },
-            { type: "lyric", text: "夕暮れが迫る \n 黄昏临近", song: "——评论家" },
-            { type: "lyric", text: "雨が降って、夜を待って \n 雨水落下，静待黑夜", song: "——プロポーズ /propose(なとり)" },
-            { type: "lyric", text: "灰でむらさきに まみれた18時に \n 灰中染紫的十八时", song: "——hp" },
-            { type: "lyric", text: "夜の訪れ知らせる \n 将夜晚的到来宣告", song: "——蜜月アン・ドゥ・トロワ" },
-            { type: "lyric", text: "つま先に月明かり \n 月光洒在脚尖", song: "——Jane Doe" },
-            { type: "lyric", text: "黙って観ていた星たちでさえ   この一瞬だけ  手を叩くみたい \n 就连宁静观望的群星 在这独一无二的瞬间 似乎也拍起了手", song: "トワイライト·セレナーデ" },
-            { type: "lyric", text: "夜だけの温室で おやすみ \n 仅在夜晚的温室中 晚安 ", song: "温室魔法" },
-            { type: "lyric", text: "二度と明けない夜が全て攫っていく \n 不会再破晓的夜晚将一切慢慢夺走", song: "——プラネテス /行星" }
-        ] },
-        { title: "死亡", items: [
-            { type: "intro", text: "夜、溶于黑暗，与名为死亡的变体。" },
-            { type: "lyric", text: "生活をまだ羅列している  想像をまた枯らしている \n 只是徒然将这生活罗列起来  只是让想象力再次枯竭下去", song: "——植物になっていく /变成植物" },
-            { type: "lyric", text: "もの足りないから  停滞した残映にいざさらば \n 正因为有所欠缺  向着停滞的残影道永别吧", song: "——散り散り" },
-            { type: "lyric", text: "ここで 言って    穏やかな ままで 去って \n 就在这里 说出来吧  请就这样 平静地 离开吧 ", song: "——お勉強しといてよ /要好好学一下哦" },
-            { type: "lyric", text: "繰り返す  フラッシュバック?蝉の声?二度とは帰らぬ君 \n 闪现的一幕幕、蝉声、再不会回来的你", song: "——少女レイ /少女Rei" },
-            { type: "lyric", text: "灰すら遺らなくても \n 连灰烬都不曾留下", song: "——灰すら遺らなくても。 / 即使连灰烬都不曾留下。" },
-            { type: "lyric", text: "なんだかんだしちゃって幕は降り \n 这样那样总而言之帷幕就此落下", song: "——ころしちゃった! /杀死她啦！" }
-        ] },
-        { title: "遗忘", items: [
-            { type: "intro", text: "死亡与遗忘的区别是？" },
-            { type: "lyric", text: "流る　きのうが透明になっていく \n 流转的昨天 正逐渐变得透明", song: "——miroir" },
-            { type: "lyric", text: "往来を風が追い抜いていった  思い出のような気配があった \n 清风掠去往来不息  心有所感似如追忆", song: "——死生観にさよなら /向生死观告别" },
-            { type: "lyric", text: "忘れてしまったこと数えきれずに浮かんでは \n 忘却之事如数不尽般地浮上心头", song: "——透明 (Transparent)" },
-            { type: "lyric", text: "忘れてしまうよ　言葉や感触も    だから今だけは　思い出したいのだ \n 因为我们会忘记讲过的话 忘记触碰过的事  所以要趁现在把一切都回想起来", song: "——幽霊" },
-            { type: "lyric", text: "落ちた破片を片付ける姿見つめて立ち尽くす \n 收拾着掉落的碎片的样子只是看着呆立着", song: "——あなたはヒーロー /你是英雄" },
-            { type: "lyric", text: "故に 忘れてしまっても \n 即使因此 忘得一干二净也没关系", song: "——カトラリー /餐具" }
-        ] },
-        { title: "痛苦", items: [
-            { type: "intro", text: "尚未学会装作遗忘痛苦。" },
-            { type: "lyric", text: "「苦（くる）しまなくてはいけないよ」 \n 「必须要承受苦痛啊」", song: "——失踪前夜" },
-            { type: "lyric", text: "「此処はそんなに寒くは無いから」 \n 「这里也没有那么寒冷啊。」", song: "——深昏睡" },
-            { type: "lyric", text: "あわれな独り言を記している \n 记录下可悲的独白", song: "——熱異常" },
-            { type: "lyric", text: "成为我永远的叹息", song: "——塔与少女的无题诗" },
-            { type: "lyric", text: "散々な日々は変わらないわ \n 狼狈不堪的日子没有丝毫改变", song: "——フォニイ /phony" }
-        ] },
-        { title: "逃避", items: [
-            { type: "intro", text: "对名为现实与成长的痛苦尽力逃避。" },
-            { type: "lyric", text: "아닌 척해볼까 해도 There's an issue  \n 试着装作若无其事 但问题依然存在", song: "——GPT" },
-            { type: "lyric", text: "目隠しして逃げて、気付けば闇 \n 遮住双眼一味逃避，回过神来已是一片黑暗", song: "——再生" },
-            { type: "lyric", text: "眠そうな目 \n 困倦的双眼", song: "——プロポーズ /propose(内緒のピアス)" },
-            { type: "lyric", text: "殻は裸　駄法螺　混ぜらば \n 无遮挡的皮囊  混上一眼假的谎", song: "——WWW" },
-            { type: "lyric", text: "そうすれば 変わらないから \n 如此 永不改变吧", song: "——ツギハギスタッカート /拼凑的断音" },
-            { type: "lyric", text: "All you worries, my dear \n Are over, Over, Over", song: "——イガク /医学" },
-            { type: "lyric", text: "腐り落ちてしまう前にさ さよなら夏 \n 在这一切腐朽消散之前 再见了夏天", song: "——死别" },
-            { type: "lyric", text: "追いつけないまま大人になって \n 就这样未能追上，便已长大成人", song: "——ただ君に晴れ /只给予你的晴天" },
-            { type: "lyric", text: "(はい) はい謹んで \n (好的) 好的，恭敬从命", song: "——はいよろこんで /乐意效劳" },
-            { type: "lyric", text: "雨停在半空", song: "——半醒" },
-            { type: "lyric", text: "すんませんね。 \n 真是抱歉呢。", song: "——人マニア" },
-            { type: "lyric", text: "今日も願ってる     こないでこないで次の朝よ \n 今天也同样祈祷着   第二天的早晨不要到来", song: "——3時12分" }
-        ] },
-        { title: "梦境", items: [
-            { type: "intro", text: "在逃避的空白中故作思索地陷入梦境。" },
-            { type: "lyric", text: "さっき迄の憂鬱すら 上手く形容できない貴方へ \n 致迄今为止的忧郁  都不能很好地形容的你", song: "——happy endじゃ愛せない" },
-            { type: "lyric", text: "都会的灯火中 映照着无人问津的梦", song: "——Nightension" },
-            { type: "lyric", text: "拝啓 僕の願いよ 未来よ 絶え間無い後悔よ \n 敬启 我的愿望 未来 还有那未曾断绝的后悔", song: "——flos" },
-            { type: "lyric", text: "なかったことにしないで \n 请不要当作未曾发生", song: "——匙ノ咒" },
-            { type: "lyric", text: "魔法が解ける前に。 \n 在魔法解除之前", song: "——偏食" },
-            { type: "lyric", text: "等梦完醒来  再去收拾残骸", song: "——大眠" }
-        ] },
-        { title: "白昼", items: [
-            { type: "intro", text: "直到梦境被白昼打破——" },
-            { type: "lyric", text: "아침은 너무 멀어 \n 清晨还太过遥远", song: "——Ditto" },
-            { type: "lyric", text: "来不及寄给昨日的岛屿  明天即将来临", song: "——春日纪行" },
-            { type: "lyric", text: "Wish the days would pass \n 但愿时光飞逝", song: "——VOIDS" },
-            { type: "lyric", text: "晒干这一片蓝色", song: "——我的悲伤是水做的" },
-            { type: "lyric", text: "明日の光が世界を染めてく \n 明天的光明也依然照耀著世界", song: "——帝国少女" },
-            { type: "lyric", text: "散らかした日常を棚に戻して    喩うるならば、午後の陽だまりが \n 将散乱的日常放回架子上  若要比喻的话、午后的向阳处", song: "——天国" }
-        ] },
-        { title: "季节", items: [
-            { type: "intro", text: "携来阳光的白昼宣告季节。" },
-            { type: "lyric", text: "ここには誰もいない \n 这里谁都不在", song: "——春を告げる /宣告春天" },
-            { type: "lyric", text: "移る季節に \n 在这流转的季节里", song: "——氷水色" },
-            { type: "lyric", text: "越长大同行的人却越少 \n 世界变大 还是我们变小", song: "——丑马" },
-            { type: "lyric", text: "春の匂いはもう止む \n 春的气息已然消散", song: "——春泥棒 /偷春人" },
-            { type: "lyric", text: "春も夏も青く澄んだ群青も  僕には合わなかった \n 春天和夏天和澄澈的群青色  都与我并不相配", song: "——君が僕を嗤う日  /你嘲笑我的那天" },
-            { type: "lyric", text: "夏が遠くて \n 夏天逐渐远去", song: "——ヒッチコック /Hitchcock" },
-            { type: "lyric", text: "夏が去っても追慕は切だ \n 夏天就算不留痕迹地离开  追慕也是让人心切的", song: "——言って。 /说吧。" },
-            { type: "lyric", text: "この世界この季節に別れで満ちている \n 这个世界这个季节充满着别离", song: "——宣布死亡" }
-        ] },
-        { title: "前行", items: [
-            { type: "intro", text: "炎热的季节、晴朗的季节、离别的季节、前行的季节、或别的什么——" },
-            { type: "lyric", text: "この場所で途方に暮れて  \n 在这个走投无路的地方不知所措", song: "——Over Flow(er)" },
-            { type: "lyric", text: "躓いても間違ってでも  ここまで歩いて来たんだ \n 即使跌倒 即使走错路 我们也走到了这里", song: "——風のたより" },
-            { type: "lyric", text: "こんなだらけた暮らしで    案外しあわせなの \n 在这样的懒散日子里   却意外地感到幸福", song: "——seaglass" },
-            { type: "lyric", text: "生き続ける限り 永遠に \n 只要活着就永远 不会停歇", song: "——脆弱性" },
-            { type: "lyric", text: "なぞる誰かの言葉を  いつか要らなくなるまで \n 直到有一天你不再需要  重复别人的话语", song: "——文学讲义" },
-            { type: "lyric", text: "この歩みでしか僕じゃないなら    水辺で明日を待つわけには行かない \n 只能由我自己來踏出這一步  不能在水邊傻傻等待明天到來", song: "——Water Flower" }
-        ] }
-    ];
-
-    // ----- 通用工具函数 -----
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;').replace(/\n/g, '<br>');
-    }
-
-    // 歌词结构构建（原文 + 译文）
-    function buildLyricStructure(rawText) {
-        if (!rawText) return { html: '', isPureChinese: false };
-        if (rawText.includes('\n')) {
-            const parts = rawText.split('\n');
-            const original = parts[0].trim();
-            const translation = parts.slice(1).join('\n').trim();
-            if (translation.length > 0) {
-                return {
-                    html: `<div class="lyric-original">${escapeHtml(original)}</div><div class="lyric-translated">${escapeHtml(translation)}</div>`,
-                    isPureChinese: false
-                };
-            } else {
-                return { html: `<div class="lyric-translated only-chinese">${escapeHtml(original)}</div>`, isPureChinese: true };
-            }
-        } else {
-            return { html: `<div class="lyric-translated only-chinese">${escapeHtml(rawText)}</div>`, isPureChinese: true };
-        }
-    }
-    function refreshCardLyric(card, newText) {
-        const textDiv = card.querySelector('.lyric-text');
-        if (!textDiv) return;
-        const { html } = buildLyricStructure(newText);
-        textDiv.innerHTML = html;
-    }
-
-    // ----- 时间轴逻辑（含动态高度重算 + 标题发光特效）-----
-    let timelineAxis, axisDot;
-    function recalcAxisGeometry() {
-        if (!timelineAxis) return;
-        const firstTitle = document.querySelector('.section-title');
-        const lastSection = document.querySelector('.section:last-child');
-        if (!firstTitle || !lastSection) return;
-        const startTop = firstTitle.getBoundingClientRect().top + window.scrollY - 24;
-        const endBottom = lastSection.getBoundingClientRect().bottom + window.scrollY + 30;
-        timelineAxis.style.top = `${startTop}px`;
-        timelineAxis.style.height = `${endBottom - startTop}px`;
-    }
-    
-    // 高亮离圆点最近的标题（强化特效）
-    function highlightNearestTitle() {
-        if (!timelineAxis || !axisDot) return;
-        const titles = Array.from(document.querySelectorAll('.section-title'));
-        if (!titles.length) return;
-        const dotTop = parseFloat(axisDot.style.top);
-        if (isNaN(dotTop)) return;
-        const axisRect = timelineAxis.getBoundingClientRect();
-        const dotY = axisRect.top + dotTop + axisDot.offsetHeight/2;
-        let nearest = null;
-        let minDist = Infinity;
-        titles.forEach(title => {
-            const rect = title.getBoundingClientRect();
-            const titleCenterY = rect.top + rect.height/2;
-            const dist = Math.abs(titleCenterY - dotY);
-            if (dist < minDist) {
-                minDist = dist;
-                nearest = title;
-            }
-        });
-        titles.forEach(title => title.classList.remove('glow-title'));
-        if (nearest && minDist < 100) {
-            nearest.classList.add('glow-title');
-        }
-    }
-    
-    function refreshTimeline() {
-        if (!timelineAxis || !axisDot) return;
-        recalcAxisGeometry();
-        const axisRect = timelineAxis.getBoundingClientRect();
-        const axisHeight = axisRect.height;
-        const dotHeight = axisDot.offsetHeight;
-        const isAtBottom = (window.innerHeight + window.scrollY + 2) >= document.documentElement.scrollHeight;
-        const isAtTop = window.scrollY <= 2;
-        if (isAtTop) { axisDot.style.top = `0px`; highlightNearestTitle(); return; }
-        if (isAtBottom) { axisDot.style.top = `${Math.max(0, axisHeight - dotHeight)}px`; highlightNearestTitle(); return; }
-        const activeEl = getActiveElement();
-        if (!activeEl) { highlightNearestTitle(); return; }
-        const activeRect = activeEl.getBoundingClientRect();
-        const activeCenterY = activeRect.top + activeRect.height / 2;
-        const relativeY = activeCenterY - axisRect.top;
-        let clampedY = Math.min(Math.max(relativeY - dotHeight/2, 0), axisHeight - dotHeight);
-        if (isNaN(clampedY)) clampedY = 0;
-        axisDot.style.top = `${clampedY}px`;
-        highlightNearestTitle();
-    }
-    function getActiveElement() {
-        const candidates = Array.from(document.querySelectorAll('.section-title, .lyric-card'));
-        if (!candidates.length) return null;
-        const viewportCenterY = window.scrollY + window.innerHeight / 2;
-        let closest = null, minDist = Infinity;
-        for (const el of candidates) {
-            const rect = el.getBoundingClientRect();
-            const centerY = rect.top + rect.height/2 + window.scrollY;
-            const dist = Math.abs(centerY - viewportCenterY);
-            if (dist < minDist) { minDist = dist; closest = el; }
-        }
-        return closest;
-    }
-    let ticking = false;
-    function onScrollOrResize() {
-        if (!ticking) {
-            requestAnimationFrame(() => { refreshTimeline(); ticking = false; });
-            ticking = true;
-        }
-    }
-
-    // ----- 歌词区域渲染 -----
-    function renderSections() {
-        const root = document.getElementById('app-root');
-        if (!root) return;
-        root.innerHTML = '';
-        sectionsData.forEach((section, secIdx) => {
-            const sectionDiv = document.createElement('div');
-            sectionDiv.className = 'section';
-            const titleEl = document.createElement('div');
-            titleEl.className = 'section-title';
-            titleEl.innerHTML = `<span class="fold-icon"></span><h2>${escapeHtml(section.title)}</h2>`;
-            sectionDiv.appendChild(titleEl);
-            let gridItems = [];
-            const flushGrid = () => {
-                if (gridItems.length) {
-                    const grid = document.createElement('div');
-                    grid.className = 'lyric-grid';
-                    gridItems.forEach(card => grid.appendChild(card));
-                    sectionDiv.appendChild(grid);
-                    gridItems = [];
-                }
-            };
-            for (let item of section.items) {
-                if (item.type === 'intro') {
-                    flushGrid();
-                    const comment = document.createElement('div');
-                    comment.className = 'section-intro-comment';
-                    comment.innerHTML = `<i class="fas fa-quote-left" style="margin-right: 8px; font-size: 0.8rem; opacity: 0.7;"></i> ${escapeHtml(item.text)}`;
-                    sectionDiv.appendChild(comment);
-                } else if (item.type === 'lyric') {
-                    const card = document.createElement('div');
-                    card.className = 'lyric-card';
-                    card._dataRef = item;
-                    const textDiv = document.createElement('div');
-                    textDiv.className = 'lyric-text';
-                    const { html } = buildLyricStructure(item.text);
-                    textDiv.innerHTML = html;
-                    card.appendChild(textDiv);
-                    if (item.song) {
-                        const metaDiv = document.createElement('div');
-                        metaDiv.className = 'song-meta';
-                        metaDiv.innerHTML = `<i class="fas fa-microphone-alt"></i><span class="song-name">✦ ${escapeHtml(item.song)}</span>`;
-                        card.appendChild(metaDiv);
-                    } else {
-                        textDiv.classList.add('narrative');
-                    }
-                    card.addEventListener('dblclick', (e) => {
-                        e.stopPropagation();
-                        const data = card._dataRef;
-                        if (!data) return;
-                        let newText = prompt('编辑歌词内容（支持换行，可用 \\n 分隔原文与译文）:', data.text);
-                        if (newText !== null && newText.trim() !== '') {
-                            data.text = newText.trim();
-                            refreshCardLyric(card, data.text);
-                        }
-                        let currentSong = data.song || '';
-                        let newSong = prompt('编辑歌曲名（可留空）:', currentSong);
-                        if (newSong !== null) {
-                            if (newSong.trim() === '') {
-                                data.song = null;
-                                const metaArea = card.querySelector('.song-meta');
-                                if (metaArea) metaArea.remove();
-                                const textDivInner = card.querySelector('.lyric-text');
-                                if (textDivInner) textDivInner.classList.add('narrative');
-                            } else {
-                                data.song = newSong.trim();
-                                let metaArea = card.querySelector('.song-meta');
-                                if (metaArea) {
-                                    metaArea.innerHTML = `<i class="fas fa-microphone-alt"></i><span class="song-name">✦ ${escapeHtml(data.song)}</span>`;
-                                } else {
-                                    const newMeta = document.createElement('div');
-                                    newMeta.className = 'song-meta';
-                                    newMeta.innerHTML = `<i class="fas fa-microphone-alt"></i><span class="song-name">✦ ${escapeHtml(data.song)}</span>`;
-                                    card.appendChild(newMeta);
-                                }
-                                const textDivInner = card.querySelector('.lyric-text');
-                                if (textDivInner) textDivInner.classList.remove('narrative');
-                            }
-                        }
-                        refreshTimeline();
-                    });
-                    gridItems.push(card);
-                }
-            }
-            flushGrid();
-            root.appendChild(sectionDiv);
-            if (secIdx !== sectionsData.length - 1) {
-                const spacer = document.createElement('div');
-                spacer.className = 'spacer-dots';
-                spacer.innerHTML = '✧  ✧  ✧';
-                root.appendChild(spacer);
-            }
-        });
-    }
-
-    function setupFoldFeatures() {
-        const sections = document.querySelectorAll('.section');
-        sections.forEach(section => {
-            const grid = section.querySelector('.lyric-grid');
-            if (!grid) return;
-            if (grid.parentElement && grid.parentElement.classList.contains('cards-fold-wrapper')) return;
-            const wrapper = document.createElement('div');
-            wrapper.className = 'cards-fold-wrapper';
-            grid.parentNode.insertBefore(wrapper, grid);
-            wrapper.appendChild(grid);
-            const titleDiv = section.querySelector('.section-title');
-            if (!titleDiv) return;
-            const iconSpan = titleDiv.querySelector('.fold-icon');
-            if (iconSpan) iconSpan.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            wrapper.style.display = 'none';
-            let expanded = false;
-            const toggleFold = (e) => {
-                e.stopPropagation();
-                if (expanded) {
-                    wrapper.style.display = 'none';
-                    if (iconSpan) iconSpan.innerHTML = '<i class="fas fa-chevron-right"></i>';
-                    expanded = false;
-                } else {
-                    wrapper.style.display = 'block';
-                    if (iconSpan) iconSpan.innerHTML = '<i class="fas fa-chevron-down"></i>';
-                    expanded = true;
-                }
-                setTimeout(() => { refreshTimeline(); }, 30);
-                refreshTimeline();
-            };
-            titleDiv.style.cursor = 'pointer';
-            titleDiv.addEventListener('click', toggleFold);
-        });
-        refreshTimeline();
-    }
-
-    // 后记遮罩逻辑
-    function setupNotesMask() {
-        const mask = document.getElementById('notes-mask');
-        const wrapper = document.getElementById('postscript-wrapper');
-        if (!mask || !wrapper) return;
-        mask.addEventListener('click', () => {
-            mask.style.display = 'none';
-            wrapper.style.filter = 'none';
-            wrapper.style.opacity = '1';
-        });
-    }
-
-    // ----- 初始化所有 -----
-    function init() {
-        renderSections();
-        setupFoldFeatures();
-        timelineAxis = document.querySelector('.timeline-axis');
-        axisDot = document.querySelector('.axis-dot');
-        if (timelineAxis && axisDot) {
-            recalcAxisGeometry();
-            refreshTimeline();
-            window.addEventListener('load', () => { recalcAxisGeometry(); refreshTimeline(); });
-            window.addEventListener('scroll', onScrollOrResize);
-            window.addEventListener('resize', () => { recalcAxisGeometry(); onScrollOrResize(); });
-        }
-        setupNotesMask();
-    }
-    init();
+var sectionsData=[
+{title:"\u591c\u665a",items:[
+{type:"intro",text:"\u76f4\u5230\u591c\u665a\u6765\u4e34\u2014\u2014"},
+{type:"lyric",text:"\u5589\u304c\u713c\u3051\u3001\u591c\u304c\u6765\u306a\u3044\n \u5589\u54dc\u70e7\u5353\uff0c\u591c\u5e55\u5374\u4ecd\u672a\u964d\u4e34",song:"\u2014\u2014\u611a\u8005\u306e\u884c\u9032"},
+{type:"lyric",text:"\u5915\u66ae\u308c\u304c\u8feb\u308b\n \u9ec4\u660f\u4e34\u8fd1",song:"\u2014\u2014\u8bc4\u8bba\u5bb6"},
+{type:"lyric",text:"\u96e8\u304c\u964d\u3063\u3066\u3001\u591c\u3092\u5f85\u3063\u3066\n \u96e8\u6c34\u843d\u4e0b\uff0c\u9759\u5f85\u9ed1\u591c",song:"\u2014\u2014\u30d7\u30ed\u30dd\u30fc\u30ba /propose(\u306a\u3068\u308a)"},
+{type:"lyric",text:"\u7070\u3067\u3080\u3089\u3055\u304d\u306b \u307e\u307f\u308c\u305f18\u6642\u306b\n \u7070\u4e2d\u67d3\u7d2b\u7684\u5341\u516b\u65f6",song:"\u2014\u2014hp"},
+{type:"lyric",text:"\u591c\u306e\u8a2a\u308c\u77e5\u3089\u305b\u308b\n \u5c06\u591c\u665a\u7684\u5230\u6765\u5ba3\u544a",song:"\u2014\u2014\u871c\u6708\u30a2\u30f3\u30fb\u30c9\u30a5\u30fb\u30c8\u30ed\u30ef"},
+{type:"lyric",text:"\u3064\u307e\u5148\u306b\u6708\u660e\u304b\u308a\n \u6708\u5149\u6d12\u5728\u811a\u5c16",song:"\u2014\u2014Jane Doe"},
+{type:"lyric",text:"\u9ed8\u3063\u3066\u89b3\u3066\u3044\u305f\u661f\u305f\u3061\u3067\u3055\u3048   \u3053\u306e\u4e00\u77ac\u3060\u3051  \u624b\u3092\u53a9\u304f\u307f\u305f\u3044\n \u5c31\u8fde\u5b81\u9759\u89c2\u671b\u7684\u7fa4\u661f \u5728\u8fd9\u72ec\u4e00\u65e0\u4e8c\u7684\u77ac\u95f4 \u4f3c\u4e4e\u4e5f\u62cd\u8d77\u4e86\u624b",song:"\u30c8\u30ef\u30a4\u30e9\u30a4\u30c8\u30fb\u30bb\u30ec\u30ca\u30fc\u30c7"},
+{type:"lyric",text:"\u591c\u3060\u3051\u306e\u6e29\u5ba4\u3067 \u304a\u3084\u3059\u307f\n \u4ec5\u5728\u591c\u665a\u7684\u6e29\u5ba4\u4e2d \u665a\u5b89 ",song:"\u6e29\u5ba4\u9b54\u6cd5"},
+{type:"lyric",text:"\u4e8c\u5ea6\u3068\u660e\u3051\u306a\u3044\u591c\u304c\u5168\u3066\u6522\u3063\u3066\u3044\u304f\n \u4e0d\u4f1a\u518d\u7834\u6653\u7684\u591c\u665a\u5c06\u4e00\u5207\u6162\u6162\u593a\u8d70",song:"\u2014\u2014\u30d7\u30e9\u30cd\u30c6\u30b9 /\u884c\u661f"}
+]},
+{title:"\u6b7b\u4ea1",items:[
+{type:"intro",text:"\u591c\u3001\u6eb6\u4e8e\u9ed1\u6697\uff0c\u4e0e\u540d\u4e3a\u6b7b\u4ea1\u7684\u53d8\u4f53\u3002"},
+{type:"lyric",text:"\u751f\u6d3b\u3092\u307e\u3060\u7f85\u5217\u3057\u3066\u3044\u308b  \u60f3\u50cf\u3092\u307e\u305f\u67af\u3089\u3057\u3066\u3044\u308b\n \u53ea\u662f\u5f92\u7136\u5c06\u8fd9\u751f\u6d3b\u7f57\u5217\u8d77\u6765  \u53ea\u662f\u8ba9\u60f3\u8c61\u529b\u518d\u6b21\u67af\u7aed\u4e0b\u53bb",song:"\u2014\u2014\u690d\u7269\u306b\u306a\u3063\u3066\u3044\u304f /\u53d8\u6210\u690d\u7269"},
+{type:"lyric",text:"\u3082\u306e\u8db3\u308a\u306a\u3044\u304b\u3089  \u505c\u6ede\u3057\u305f\u6b8b\u6620\u306b\u3044\u3056\u3055\u3089\u3070\n \u6b63\u56e0\u4e3a\u6709\u6240\u7f3a\u4e4f  \u5411\u7740\u505c\u6ede\u7684\u6b8b\u5f71\u9053\u6c38\u522b\u5427",song:"\u2014\u2014\u6563\u308a\u6563\u308a"},
+{type:"lyric",text:"\u3053\u3053\u3067 \u8a00\u3063\u3066    \u7a4f\u3084\u304b\u306a \u307e\u307e\u3067 \u53bb\u3063\u3066\n \u5c31\u5728\u8fd9\u91cc \u8bf4\u51fa\u6765\u5427   \u8bf7\u5c31\u8fd9\u6837 \u5e73\u9759\u5730 \u79bb\u5f00\u5427 ",song:"\u2014\u2014\u304a\u52c9\u5f37\u3057\u3068\u3044\u3066\u3088 /\u8981\u597d\u597d\u5b66\u4e00\u4e0b\u54e6"},
+{type:"lyric",text:"\u7e70\u308a\u8fd4\u3059  \u30d5\u30e9\u30c3\u30b7\u30e5\u30d0\u30c3\u30af?\u8749\u306e\u58f0?\u4e8c\u5ea6\u3068\u306f\u5e30\u3089\u306c\u541b\n \u95ea\u73b0\u7684\u4e00\u5e55\u5e55\u3001\u8749\u58f0\u3001\u518d\u4e0d\u4f1a\u56de\u6765\u7684\u4f60",song:"\u2014\u2014\u5c11\u5973\u30ec\u30a4 /\u5c11\u5973Rei"},
+{type:"lyric",text:"\u7070\u3059\u3089\u907a\u3089\u306a\u304f\u3066\u3082\n \u8fde\u7070\u70ec\u90fd\u4e0d\u66fe\u7559\u4e0b",song:"\u2014\u2014\u7070\u3059\u3089\u907a\u3089\u306a\u304f\u3066\u3082\u3002 / \u5373\u4f7f\u8fde\u7070\u70ec\u90fd\u4e0d\u66fe\u7559\u4e0b\u3002"},
+{type:"lyric",text:"\u306a\u3093\u3060\u304b\u3093\u3060\u3057\u3061\u3083\u3063\u3066\u5e55\u306f\u964d\u308a\n \u8fd9\u6837\u90a3\u6837\u603b\u800c\u8a00\u4e4b\u5e37\u5e55\u5c31\u6b64\u843d\u4e0b",song:"\u2014\u2014\u3053\u308d\u3057\u3061\u3083\u3063\u305f! /\u6740\u6b7b\u5979\u5566\uff01"}
+]},
+{title:"\u9057\u5fd8",items:[
+{type:"intro",text:"\u6b7b\u4ea1\u4e0e\u9057\u5fd8\u7684\u533a\u522b\u662f\uff1f"},
+{type:"lyric",text:"\u6d41\u308b\u3000\u304d\u306e\u3046\u304c\u900f\u660e\u306b\u306a\u3063\u3066\u3044\u304f\n \u6d41\u8f6c\u7684\u6628\u5929 \u6b63\u9010\u6e10\u53d8\u5f97\u900f\u660e",song:"\u2014\u2014miroir"},
+{type:"lyric",text:"\u5f80\u6765\u3092\u98a8\u304c\u8ffd\u3044\u629c\u3044\u3066\u3044\u3063\u305f  \u601d\u3044\u51fa\u306e\u3088\u3046\u306a\u6c17\u914d\u304c\u3042\u3063\u305f\n \u6e05\u98ce\u63a0\u53bb\u5f80\u6765\u4e0d\u606f  \u5fc3\u6709\u6240\u611f\u4f3c\u5982\u8ffd\u5fc6",song:"\u2014\u2014\u6b7b\u751f\u89b3\u306b\u3055\u3088\u306a\u3089 /\u5411\u751f\u6b7b\u89c2\u544a\u522b"},
+{type:"lyric",text:"\u5fd8\u308c\u3066\u3057\u307e\u3063\u305f\u3053\u3068\u6570\u3048\u304d\u308c\u305a\u306b\u6d6e\u304b\u3093\u3067\u306f\n \u5fd8\u5374\u4e4b\u4e8b\u5982\u6570\u4e0d\u5c3d\u822c\u5730\u6d6e\u4e0a\u5fc3\u5934",song:"\u2014\u2014\u900f\u660e (Transparent)"},
+{type:"lyric",text:"\u5fd8\u308c\u3066\u3057\u307e\u3046\u3088\u3000\u8a00\u8449\u3084\u89e6\u611f\u3082    \u3060\u304b\u3089\u4eca\u3060\u3051\u306f\u3000\u601d\u3044\u51fa\u3057\u305f\u3044\u306e\u3060\n \u56e0\u4e3a\u6211\u4eec\u4f1a\u5fd8\u8bb0\u8bb2\u8fc7\u7684\u8bdd \u5fd8\u8bb0\u89e6\u78b0\u8fc7\u7684\u4e8b  \u6240\u4ee5\u8981\u8d81\u73b0\u5728\u628a\u4e00\u5207\u90fd\u56de\u60f3\u8d77\u6765",song:"\u2014\u2014\u5e7d\u970a"},
+{type:"lyric",text:"\u843d\u3061\u305f\u7834\u7247\u3092\u7247\u4ed8\u3051\u308b\u59ff\u898b\u3064\u3081\u3066\u7acb\u3061\u3069\u304f\u3059\n \u6536\u62fe\u7740\u6389\u843d\u7684\u788e\u7247\u7684\u6837\u5b50\u53ea\u662f\u770b\u7740\u5446\u7acb\u7740",song:"\u2014\u2014\u3042\u306a\u305f\u306f\u30d2\u30fc\u30ed\u30fc /\u4f60\u662f\u82f1\u96c4"},
+{type:"lyric",text:"\u6545\u306b \u5fd8\u308c\u3066\u3057\u307e\u3063\u3066\u3082\n \u5373\u4f7f\u56e0\u6b64 \u5fd8\u5f97\u4e00\u5e72\u4e8c\u51c0\u4e5f\u6ca1\u5173\u7cfb",song:"\u2014\u2014\u30ab\u30c8\u30e9\u30ea\u30fc /\u9910\u5177"}
+]},
+{title:"\u75db\u82e6",items:[
+{type:"intro",text:"\u5c1a\u672a\u5b66\u4f1a\u88c5\u4f5c\u9057\u5fd8\u75db\u82e6\u3002"},
+{type:"lyric",text:"\u300c\u82e6\uff08\u304f\u308b\uff09\u3057\u307e\u306a\u304f\u3066\u306f\u3044\u3051\u306a\u3044\u3088\u300d\n \u300c\u5fc5\u987b\u8981\u627f\u53d7\u82e6\u75db\u554a\u300d",song:"\u2014\u2014\u5931\u8e2a\u524d\u591c"},
+{type:"lyric",text:"\u300c\u6b64\u51e6\u306f\u305d\u3093\u306a\u306b\u5bd2\u304f\u306f\u7121\u3044\u304b\u3089\u300d\n \u300c\u8fd9\u91cc\u4e5f\u6ca1\u6709\u90a3\u4e48\u5bd2\u51b7\u554a\u3002\u300d",song:"\u2014\u2014\u6df1\u660f\u7761"},
+{type:"lyric",text:"\u3042\u308f\u308c\u306a\u72ec\u308a\u8a00\u3092\u8a18\u3057\u3066\u3044\u308b\n \u8bb0\u5f55\u4e0b\u53ef\u60b2\u7684\u72ec\u767d",song:"\u2014\u2014\u71b1\u7570\u5e38"},
+{type:"lyric",text:"\u6210\u4e3a\u6211\u6c38\u8fdc\u7684\u53f9\u606f",song:"\u2014\u2014\u5854\u4e0e\u5c11\u5973\u7684\u65e0\u9898\u8bd7"},
+{type:"lyric",text:"\u6563\u3005\u306a\u65e5\u3005\u306f\u5909\u308f\u3089\u306a\u3044\u308f\n \u72fc\u72c8\u4e0d\u582a\u7684\u65e5\u5b50\u6ca1\u6709\u4e1d\u6beb\u6539\u53d8",song:"\u2014\u2014\u30d5\u30a9\u30cb\u30a4 /phony"}
+]},
+{title:"\u9003\u907f",items:[
+{type:"intro",text:"\u5bf9\u540d\u4e3a\u73b0\u5b9e\u4e0e\u6210\u957f\u7684\u75db\u82e6\u5c3d\u529b\u9003\u907f\u3002"},
+{type:"lyric",text:"\uc544\ub2c8 \ucc99\ud574\ubcfc\uae4c \ud574\ub3c4 There's an issue  \n \u8bd5\u7740\u88c5\u4f5c\u82e5\u65e0\u5176\u4e8b \u4f46\u95ee\u9898\u4f9d\u7136\u5b58\u5728",song:"\u2014\u2014GPT"},
+{type:"lyric",text:"\u76ee\u96a0\u3057\u3057\u3066\u9003\u3052\u3066\u3001\u6c17\u4ed8\u3051\u3070\u95c7\n \u906e\u4f4f\u53cc\u773c\u4e00\u5473\u9003\u907f\uff0c\u56de\u8fc7\u795e\u6765\u5df2\u662f\u4e00\u7247\u9ed1\u6697",song:"\u2014\u2014\u518d\u751f"},
+{type:"lyric",text:"\u7720\u305d\u3046\u306a\u76ee\n \u56f0\u5026\u7684\u53cc\u773c",song:"\u2014\u2014\u30d7\u30ed\u30dd\u30fc\u30ba /propose(\u5185\u8a31\u306e\u30d4\u30a2\u30b9)"},
+{type:"lyric",text:"\u6bbb\u306f\u88f8\u3000\u99c4\u6cd5\u5617\u3000\u6df7\u305c\u3089\u3070\n \u65e0\u906e\u6321\u7684\u76ae\u56ca  \u6df7\u4e0a\u4e00\u773c\u5047\u7684\u8c0e",song:"\u2014\u2014WWW"},
+{type:"lyric",text:"\u305d\u3046\u3059\u308c\u3070 \u5909\u308f\u3089\u306a\u3044\u304b\u3089\n \u5982\u6b64 \u6c38\u4e0d\u6539\u53d8\u5427",song:"\u2014\u2014\u30c4\u30ae\u30cf\u30ae\u30b9\u30bf\u30c3\u30ab\u30fc\u30c8 /\u62fc\u51d1\u7684\u65ad\u97f3"},
+{type:"lyric",text:"All you worries, my dear \n Are over, Over, Over",song:"\u2014\u2014\u30a4\u30ac\u30af /\u533b\u5b66"},
+{type:"lyric",text:"\u8150\u308a\u843d\u3061\u3066\u3057\u307e\u3046\u524d\u306b\u3055 \u3055\u3088\u306a\u3089\u590f\n \u5728\u8fd9\u4e00\u5207\u8150\u673d\u6d88\u6563\u4e4b\u524d \u518d\u89c1\u4e86\u590f\u5929",song:"\u2014\u2014\u6b7b\u522b"},
+{type:"lyric",text:"\u8ffd\u3044\u3064\u3051\u306a\u3044\u307e\u307e\u5927\u4eba\u306b\u306a\u3063\u3066\n \u5c31\u8fd9\u6837\u672a\u80fd\u8ffd\u4e0a\uff0c\u4fbf\u5df2\u957f\u5927\u6210\u4eba",song:"\u2014\u2014\u305f\u3060\u541b\u306b\u6674\u308c /\u53ea\u7ed9\u4e88\u4f60\u7684\u6674\u5929"},
+{type:"lyric",text:"(\u306f\u3044) \u306f\u3044\u8b39\u3093\u3067\n (\u597d\u7684) \u597d\u7684\uff0c\u606d\u656c\u4ece\u547d",song:"\u2014\u2014\u306f\u3044\u3088\u308d\u3053\u3093\u3067 /\u4e50\u610f\u6548\u52b3"},
+{type:"lyric",text:"\u96e8\u505c\u5728\u534a\u7a7a",song:"\u2014\u2014\u534a\u9192"},
+{type:"lyric",text:"\u3059\u3093\u307e\u305b\u3093\u306d\u3002\n \u771f\u662f\u62b1\u6b49\u5462\u3002",song:"\u2014\u2014\u4eba\u30de\u30cb\u30a2"},
+{type:"lyric",text:"\u4eca\u65e5\u3082\u9858\u3063\u3066\u308b     \u3053\u306a\u3044\u3067\u3053\u306a\u3044\u3067\u6b21\u306e\u671d\u3088\n \u4eca\u5929\u4e5f\u540c\u6837\u7948\u7977\u7740   \u7b2c\u4e8c\u5929\u7684\u65e9\u6668\u4e0d\u8981\u5230\u6765",song:"\u2014\u20143\u664212\u5206"}
+]},
+{title:"\u68a6\u5883",items:[
+{type:"intro",text:"\u5728\u9003\u907f\u7684\u7a7a\u767d\u4e2d\u6545\u4f5c\u601d\u7d22\u5730\u9677\u5165\u68a6\u5883\u3002"},
+{type:"lyric",text:"\u3055\u3063\u304d\u8fc4\u306e\u6182\u9b31\u3059\u3089 \u4e0a\u624b\u304f\u5f62\u5bb9\u3067\u304d\u306a\u3044\u8cb4\u65b9\u3078\n \u81f4\u8fc4\u4eca\u4e3a\u6b62\u7684\u5fe7\u90c1  \u90fd\u4e0d\u80fd\u5f88\u597d\u5730\u5f62\u5bb9\u7684\u4f60",song:"\u2014\u2014happy end\u3058\u3083\u611b\u305b\u306a\u3044"},
+{type:"lyric",text:"\u90fd\u4f1a\u7684\u706f\u706b\u4e2d \u6620\u7167\u7740\u65e0\u4eba\u95ee\u6d25\u7684\u68a6",song:"\u2014\u2014Nightension"},
+{type:"lyric",text:"\u62dd\u5553 \u50d5\u306e\u9858\u3044\u3088 \u672a\u6765\u3088 \u7d76\u3048\u9593\u7121\u3044\u5f8c\u6094\u3088\n \u656c\u542f \u6211\u7684\u613f\u671b \u672a\u6765 \u8fd8\u6709\u90a3\u65ed\u672a\u65ad\u7edd\u7684\u540e\u6094",song:"\u2014\u2014flos"},
+{type:"lyric",text:"\u306a\u304b\u3063\u305f\u3053\u3068\u306b\u3057\u306a\u3044\u3067\n \u8bf7\u4e0d\u8981\u5f53\u4f5c\u672a\u66fe\u53d1\u751f",song:"\u2014\u2014\u5319\u30ce\u546a"},
+{type:"lyric",text:"\u9b54\u6cd5\u304c\u89e3\u3051\u308b\u524d\u306b\u3002\n \u5728\u9b54\u6cd5\u89e3\u9664\u4e4b\u524d",song:"\u2014\u2014\u504f\u98df"},
+{type:"lyric",text:"\u7b49\u68a6\u5b8c\u9192\u6765  \u518d\u53bb\u6536\u62fe\u6b8b\u9ab8",song:"\u2014\u2014\u5927\u7720"}
+]},
+{title:"\u767d\u663c",items:[
+{type:"intro",text:"\u76f4\u5230\u68a6\u5883\u88ab\u767d\u663c\u6253\u7834\u2014\u2014"},
+{type:"lyric",text:"\uc544\uce68\uc740 \ub108\ubb34 \uba40\uc5b4\n \u6e05\u6668\u8fd8\u8fc7\u4e8e\u9065\u8fdc",song:"\u2014\u2014Ditto"},
+{type:"lyric",text:"\u6765\u4e0d\u53ca\u5bc4\u7ed9\u6628\u65e5\u7684\u5c9b\u5c7f  \u660e\u5929\u5373\u5c06\u6765\u4e34",song:"\u2014\u2014\u6625\u65e5\u7eaa\u884c"},
+{type:"lyric",text:"Wish the days would pass \n \u4f46\u613f\u65f6\u5149\u98de\u901d",song:"\u2014\u2014VOIDS"},
+{type:"lyric",text:"\u6652\u5e72\u8fd9\u4e00\u7247\u84dd\u8272",song:"\u2014\u2014\u6211\u7684\u60b2\u4f24\u662f\u6c34\u505a\u7684"},
+{type:"lyric",text:"\u660e\u65e5\u306e\u5149\u304c\u4e16\u754c\u3092\u67d3\u3081\u3066\u304f\n \u660e\u5929\u7684\u5149\u660e\u4e5f\u4f9d\u7136\u7167\u8000\u8457\u4e16\u754c",song:"\u2014\u2014\u5e1d\u56fd\u5c11\u5973"},
+{type:"lyric",text:"\u6563\u3089\u304b\u3057\u305f\u65e5\u5e38\u3092\u68da\u306b\u623b\u3057\u3066    \u5619\u3046\u308b\u306a\u3089\u3070\u3001\u5348\u5f8c\u306e\u967d\u3060\u307e\u308a\u304c\n \u5c06\u6563\u4e71\u7684\u65e5\u5e38\u653e\u56de\u67b6\u5b50\u4e0a  \u82e5\u8981\u6bd4\u55bb\u7684\u8bdd\u3001\u5348\u540e\u7684\u5411\u9633\u5904",song:"\u2014\u2014\u5929\u56fd"}
+]},
+{title:"\u5b63\u8282",items:[
+{type:"intro",text:"\u643a\u6765\u9633\u5149\u7684\u767d\u663c\u5ba3\u544a\u5b63\u8282\u3002"},
+{type:"lyric",text:"\u3053\u3053\u306b\u306f\u8ab0\u3082\u3044\u306a\u3044\n \u8fd9\u91cc\u8c01\u90fd\u4e0d\u5728",song:"\u2014\u2014\u6625\u3092\u544a\u3052\u308b /\u5ba3\u544a\u6625\u5929"},
+{type:"lyric",text:"\u79fb\u308b\u5b63\u7bc0\u306b\n \u5728\u8fd9\u6d41\u8f6c\u7684\u5b63\u8282\u91cc",song:"\u2014\u2014\u6c37\u6c34\u8272"},
+{type:"lyric",text:"\u8d8a\u957f\u5927\u540c\u884c\u7684\u4eba\u5374\u8d8a\u5c11\n \u4e16\u754c\u53d8\u5927 \u8fd8\u662f\u6211\u4eec\u53d8\u5c0f",song:"\u2014\u2014\u4e11\u9a6c"},
+{type:"lyric",text:"\u6625\u306e\u5302\u3044\u306f\u3082\u3046\u6b62\u3080\n \u6625\u7684\u6c14\u606f\u5df2\u7136\u6d88\u6563",song:"\u2014\u2014\u6625\u6ce5\u68d2 /\u5077\u6625\u4eba"},
+{type:"lyric",text:"\u6625\u3082\u590f\u3082\u9752\u304f\u6f84\u3093\u3060\u7fa4\u9752\u3082  \u50d5\u306b\u306f\u5408\u308f\u306a\u304b\u3063\u305f\n \u6625\u5929\u548c\u590f\u5929\u548c\u6f84\u6f88\u7684\u7fa4\u9752\u8272  \u90fd\u4e0e\u6211\u5e76\u4e0d\u76f8\u914d",song:"\u2014\u2014\u541b\u304c\u50d5\u3092\u5632\u308b\u65e5  /\u4f60\u5632\u7b11\u6211\u7684\u90a3\u5929"},
+{type:"lyric",text:"\u590f\u304c\u9060\u304f\u3066\n \u590f\u5929\u9010\u6e10\u8fdc\u53bb",song:"\u2014\u2014\u30d2\u30c3\u30c1\u30b3\u30c3\u30af /Hitchcock"},
+{type:"lyric",text:"\u590f\u304c\u53bb\u3063\u3066\u3082\u8ffd\u6155\u306f\u5207\u3060\n \u590f\u5929\u5c31\u7b97\u4e0d\u7559\u75d5\u8ff9\u5730\u79bb\u5f00  \u8ffd\u6155\u4e5f\u662f\u8ba9\u4eba\u5fc3\u5207\u7684",song:"\u2014\u2014\u8a00\u3063\u3066\u3002 /\u8bf4\u5427\u3002"},
+{type:"lyric",text:"\u3053\u306e\u4e16\u754c\u3053\u306e\u5b63\u7bc0\u306b\u5225\u308c\u3067\u6e80\u3061\u3066\u3044\u308b\n \u8fd9\u4e2a\u4e16\u754c\u8fd9\u4e2a\u5b63\u8282\u5145\u6ee1\u7740\u522b\u79bb",song:"\u2014\u2014\u5ba3\u5e03\u6b7b\u4ea1"}
+]},
+{title:"\u524d\u884c",items:[
+{type:"intro",text:"\u708e\u70ed\u7684\u5b63\u8282\u3001\u6674\u6717\u7684\u5b63\u8282\u3001\u79bb\u522b\u7684\u5b63\u8282\u3001\u524d\u884c\u7684\u5b63\u8282\u3001\u6216\u522b\u7684\u4ec0\u4e48\u2014\u2014"},
+{type:"lyric",text:"\u3053\u306e\u5834\u6240\u3067\u9014\u65b9\u306b\u66ae\u308c\u3066  \n \u5728\u8fd9\u4e2a\u8d70\u6295\u65e0\u8def\u7684\u5730\u65b9\u4e0d\u77e5\u6240\u63aa",song:"\u2014\u2014Over Flow(er)"},
+{type:"lyric",text:"\u8e43\u3044\u3066\u3082\u9593\u9055\u3063\u3066\u3067\u3082  \u3053\u3053\u307e\u3067\u6b69\u3044\u3066\u6765\u305f\u3093\u3060\n \u5373\u4f7f\u8dcc\u5012 \u5373\u4f7f\u8d70\u9519\u8def \u6211\u4eec\u4e5f\u8d70\u5230\u4e86\u8fd9\u91cc",song:"\u2014\u2014\u98a8\u306e\u305f\u3088\u308a"},
+{type:"lyric",text:"\u3053\u3093\u306a\u3060\u3089\u3051\u305f\u66ae\u3089\u3057\u3067    \u6848\u5916\u3057\u3042\u308f\u305b\u306a\u306e\n \u5728\u8fd9\u6837\u7684\u61d2\u6563\u65e5\u5b50\u91cc   \u5374\u610f\u5916\u5730\u611f\u5230\u5e78\u798f",song:"\u2014\u2014seaglass"},
+{type:"lyric",text:"\u751f\u304d\u7d9a\u3051\u308b\u9650\u308a \u6c38\u9060\u306b\n \u53ea\u8981\u6d3b\u7740\u5c31\u6c38\u8fdc \u4e0d\u4f1a\u505c\u61a9",song:"\u2014\u2014\u8106\u5f31\u6027"},
+{type:"lyric",text:"\u306a\u305e\u308b\u8ab0\u304b\u306e\u8a00\u8449\u3092  \u3044\u3064\u304b\u8981\u3089\u306a\u304f\u306a\u308b\u307e\u3067\n \u76f4\u5230\u6709\u4e00\u5929\u4f60\u4e0d\u518d\u9700\u8981  \u91cd\u590d\u522b\u4eba\u7684\u8bdd\u8bed",song:"\u2014\u2014\u6587\u5b66\u8bb2\u4e49"},
+{type:"lyric",text:"\u3053\u306e\u6b69\u307f\u3067\u3057\u304b\u50d5\u3058\u3083\u306a\u3044\u306a\u3089    \u6c34\u8fba\u3067\u660e\u65e5\u3092\u5f85\u3064\u308f\u3051\u306b\u306f\u884c\u304b\u306a\u3044\n \u53ea\u80fd\u7531\u6211\u81ea\u5df1\u4f86\u8e0f\u51fa\u9019\u4e00\u6b65  \u4e0d\u80fd\u5728\u6c34\u908a\u50bb\u50bb\u7b49\u5f85\u660e\u5929\u5230\u4f86",song:"\u2014\u2014Water Flower"}
+]}];
+function escapeHtml(s){if(!s)return'';return s.replace(/[&<>"'`]/g,function(m){if(m==='&')return'&amp;';if(m==='<')return'&lt;';if(m==='>')return'&gt;';if(m==='"')return'&quot;';if(m==="'")return'&#39;';if(m==='`')return'&#96;';return m;}).replace(/\n/g,'<br>');}
+function buildLyricStructure(t){if(!t)return{html:'',isPureChinese:false};if(t.includes('\n')){var p=t.split('\n'),o=p[0].trim(),tr=p.slice(1).join('\n').trim();if(tr.length>0)return{html:'<div class="lyric-original">'+escapeHtml(o)+'</div><div class="lyric-translated">'+escapeHtml(tr)+'</div>',isPureChinese:false};else return{html:'<div class="lyric-translated only-chinese">'+escapeHtml(o)+'</div>',isPureChinese:true}}else return{html:'<div class="lyric-translated only-chinese">'+escapeHtml(t)+'</div>',isPureChinese:true}}
+var timelineAxis,axisDot;
+function recalcAxisGeometry(){if(!timelineAxis)return;var ft=document.querySelector('.section-title'),ls=document.querySelector('.section:last-child');if(!ft||!ls)return;var st=ft.getBoundingClientRect().top+window.scrollY-24,eb=ls.getBoundingClientRect().bottom+window.scrollY+30;timelineAxis.style.top=st+'px';timelineAxis.style.height=(eb-st)+'px'}
+function highlightNearestTitle(){if(!timelineAxis||!axisDot)return;var titles=Array.from(document.querySelectorAll('.section-title'));if(!titles.length)return;var dotTop=parseFloat(axisDot.style.top);if(isNaN(dotTop))return;var axisRect=timelineAxis.getBoundingClientRect(),dotY=axisRect.top+dotTop+axisDot.offsetHeight/2,nearest=null,minDist=Infinity;titles.forEach(function(t){var r=t.getBoundingClientRect(),c=r.top+r.height/2,d=Math.abs(c-dotY);if(d<minDist){minDist=d;nearest=t}});titles.forEach(function(t){t.classList.remove('glow-title')});if(nearest&&minDist<100)nearest.classList.add('glow-title')}
+function refreshTimeline(){if(!timelineAxis||!axisDot)return;recalcAxisGeometry();var axisRect=timelineAxis.getBoundingClientRect(),axisH=axisRect.height,dotH=axisDot.offsetHeight,atB=(window.innerHeight+window.scrollY+2)>=document.documentElement.scrollHeight,atT=window.scrollY<=2;if(atT){axisDot.style.top='0px';highlightNearestTitle();return}if(atB){axisDot.style.top=Math.max(0,axisH-dotH)+'px';highlightNearestTitle();return}var ae=getActiveElement();if(!ae){highlightNearestTitle();return}var ar=ae.getBoundingClientRect(),ac=ar.top+ar.height/2,ry=ac-axisRect.top,cy=Math.min(Math.max(ry-dotH/2,0),axisH-dotH);if(isNaN(cy))cy=0;axisDot.style.top=cy+'px';highlightNearestTitle()}
+function getActiveElement(){var c=Array.from(document.querySelectorAll('.section-title, .lyric-card'));if(!c.length)return null;var vc=window.scrollY+window.innerHeight/2,cl=null,md=Infinity;for(var i=0;i<c.length;i++){var e=c[i],r=e.getBoundingClientRect(),cy=r.top+r.height/2+window.scrollY,d=Math.abs(cy-vc);if(d<md){md=d;cl=e}}return cl}
+var ticking=false;function onScrollOrResize(){if(!ticking){requestAnimationFrame(function(){refreshTimeline();ticking=false});ticking=true}}
+function renderSections(){var root=document.getElementById('app-root');if(!root)return;root.innerHTML='';sectionsData.forEach(function(section,secIdx){var sd=document.createElement('div');sd.className='section';var te=document.createElement('div');te.className='section-title';te.setAttribute('tabindex','0');te.setAttribute('role','button');te.innerHTML='<span class="fold-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span><h2>'+escapeHtml(section.title)+'</h2>';sd.appendChild(te);var gis=[];function fg(){if(gis.length){var g=document.createElement('div');g.className='lyric-grid';gis.forEach(function(c){g.appendChild(c)});sd.appendChild(g);gis=[]}}for(var i=0;i<section.items.length;i++){var item=section.items[i];if(item.type==='intro'){fg();var c=document.createElement('div');c.className='section-intro-comment';c.innerHTML='<svg viewBox="0 0 24 24" width="0.8rem" height="0.8rem" fill="currentColor" style="margin-right:8px;opacity:0.7;vertical-align:middle;"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg> '+escapeHtml(item.text);sd.appendChild(c)}else if(item.type==='lyric'){var card=document.createElement('div');card.className='lyric-card';var td=document.createElement('div');td.className='lyric-text';var ly=buildLyricStructure(item.text);td.innerHTML=ly.html;card.appendChild(td);if(item.song){var md=document.createElement('div');md.className='song-meta';md.innerHTML='<svg viewBox="0 0 24 24" width="0.8em" height="0.8em" fill="currentColor"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg><span class="song-name">\u2726 '+escapeHtml(item.song)+'</span>';card.appendChild(md)}else td.classList.add('narrative');gis.push(card)}}fg();root.appendChild(sd);if(secIdx!==sectionsData.length-1){var sp=document.createElement('div');sp.className='spacer-dots';sp.innerHTML='\u2727 \u2727 \u2727';root.appendChild(sp)}})}
+function setupFoldFeatures(){var sections=document.querySelectorAll('.section');sections.forEach(function(section){var grid=section.querySelector('.lyric-grid');if(!grid)return;if(grid.parentElement&&grid.parentElement.classList.contains('cards-fold-wrapper'))return;var wrapper=document.createElement('div');wrapper.className='cards-fold-wrapper';grid.parentNode.insertBefore(wrapper,grid);wrapper.appendChild(grid);var titleDiv=section.querySelector('.section-title');if(!titleDiv)return;var iconSpan=titleDiv.querySelector('.fold-icon');if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>';wrapper.style.display='none';var expanded=false;var toggleFold=function(e){e.stopPropagation();if(expanded){wrapper.style.display='none';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>';expanded=false}else{wrapper.style.display='block';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>';expanded=true}setTimeout(function(){refreshTimeline()},30);refreshTimeline()};titleDiv.style.cursor='pointer';titleDiv.addEventListener('click',toggleFold);titleDiv.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleFold(e)}})});refreshTimeline()}
+var allExpanded=false;function setupToggleAll(){var btn=document.getElementById('toggleAllBtn');if(!btn)return;btn.addEventListener('click',function(){allExpanded=!allExpanded;var sections=document.querySelectorAll('.section');sections.forEach(function(section){var wrapper=section.querySelector('.cards-fold-wrapper'),titleDiv=section.querySelector('.section-title'),iconSpan=titleDiv?titleDiv.querySelector('.fold-icon'):null;if(!wrapper)return;if(allExpanded){wrapper.style.display='block';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>'}else{wrapper.style.display='none';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>'}});btn.innerHTML=allExpanded?'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg> \u5168\u90e8\u6536\u8d77':'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg> \u5168\u90e8\u5c55\u5f00';setTimeout(function(){refreshTimeline()},50)});btn.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();btn.click()}})}
+function setupNotesMask(){var mask=document.getElementById('notes-mask'),wrapper=document.getElementById('postscript-wrapper'),reMaskBtn=document.getElementById('reMaskBtn');if(!mask||!wrapper)return;function reveal(){mask.style.display='none';wrapper.style.filter='none';wrapper.style.opacity='1';if(reMaskBtn)reMaskBtn.style.display='inline-block'}function conceal(){mask.style.display='flex';wrapper.style.filter='blur(4px)';wrapper.style.opacity='0.6';if(reMaskBtn)reMaskBtn.style.display='none'}mask.addEventListener('click',reveal);mask.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();reveal()}});if(reMaskBtn){reMaskBtn.addEventListener('click',conceal);reMaskBtn.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();conceal()}})}}
+function setupFloatingNav(){var navFloat=document.getElementById('navFloat'),navToggle=document.getElementById('navToggle'),navPanel=document.getElementById('navPanel'),navTop=document.getElementById('navTop');if(!navFloat||!navToggle||!navPanel||!navTop)return;var navVisible=false;window.addEventListener('scroll',function(){if(window.scrollY>300){if(!navVisible){navFloat.classList.add('visible');navVisible=true}}else{if(navVisible){navFloat.classList.remove('visible');navVisible=false}}});navTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});navTop.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})}});var panelOpen=false;function buildNavPanel(){navPanel.innerHTML='';sectionsData.forEach(function(section,idx){var item=document.createElement('button');item.className='nav-panel-item';item.setAttribute('tabindex','0');item.innerHTML='<svg viewBox="0 0 24 24" width="0.75em" height="0.75em" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg> '+escapeHtml(section.title);item.addEventListener('click',function(){var titles=document.querySelectorAll('.section-title');if(titles[idx])titles[idx].scrollIntoView({behavior:'smooth',block:'start'});panelOpen=false;navPanel.classList.remove('open');navToggle.setAttribute('aria-label','\u6253\u5f00\u76ee\u5f55')});item.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();item.click()}});navPanel.appendChild(item)})}buildNavPanel();navToggle.addEventListener('click',function(){panelOpen=!panelOpen;if(panelOpen){navPanel.classList.add('open');navToggle.setAttribute('aria-label','\u5173\u95ed\u76ee\u5f55')}else{navPanel.classList.remove('open');navToggle.setAttribute('aria-label','\u6253\u5f00\u76ee\u5f55')}});navToggle.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();navToggle.click()}});document.addEventListener('click',function(e){if(panelOpen&&!navFloat.contains(e.target)){panelOpen=false;navPanel.classList.remove('open');navToggle.setAttribute('aria-label','\u6253\u5f00\u76ee\u5f55')}})}
+function init(){renderSections();setupFoldFeatures();setupToggleAll();timelineAxis=document.querySelector('.timeline-axis');axisDot=document.querySelector('.axis-dot');if(timelineAxis&&axisDot){recalcAxisGeometry();refreshTimeline();window.addEventListener('load',function(){recalcAxisGeometry();refreshTimeline()});window.addEventListener('scroll',onScrollOrResize);window.addEventListener('resize',function(){recalcAxisGeometry();onScrollOrResize()})}setupNotesMask();setupFloatingNav()}
+init();
 </script>
 </body>
 </html>
