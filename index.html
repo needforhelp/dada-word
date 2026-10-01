@@ -15,6 +15,10 @@
 	    <meta name="twitter:description" content="日推系列的打碎重组，和歌本身没有关系，也只是假装在叙述。">
 
     <style>
+        /* --- rules for the shared-sprite refactor (no visual change) --- */
+        .icon-sprite { display: none; }
+        .section-intro-comment svg { margin-right: 8px; opacity: 0.7; vertical-align: middle; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: radial-gradient(circle at 10% 20%, #0a1a1c 0%, #02080a 100%);
@@ -216,14 +220,30 @@
         .lyric-card { opacity: 0; animation: fadeSlideUp 0.45s ease forwards; }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 600px) { .nav-float { bottom: 16px; right: 16px; } .nav-btn { width: 38px; height: 38px; } .nav-panel { right: 16px; bottom: 74px; min-width: 150px; } }
-    </style>
-</head>
+    </style></head>
 <body>
+
+<!-- Shared SVG symbol library: every icon below is defined once and referenced
+     with <use>, instead of repeating the same path markup at each call site. -->
+<svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-hand" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2C12.12 2 11 3.12 11 4.5V8.5C11 8.78 10.78 9 10.5 9C10.22 9 10 8.78 10 8.5V5.5C10 4.12 8.88 3 7.5 3S5 4.12 5 5.5V12.5L3.44 10.92C2.84 10.32 1.88 10.27 1.22 10.83C.531 11.41.5 12.44 1.08 13.06L5.72 18.14C6.78 19.28 8.27 20 9.97 20H16.5C18.71 20 20.5 18.21 20.5 16V8C20.5 6.62 19.38 5.5 18 5.5C17.22 5.5 16.53 5.84 16.06 6.36C15.78 4.89 14.5 3.75 13 3.75C12.81 3.75 12.63 3.77 12.45 3.81C12.05 2.72 10.89 2 9.5 2H13.5z"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24" fill="currentColor"><path d="M12 19V5m-7 7l7-7 7 7"/></symbol>
+    <symbol id="i-caret" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="currentColor"><path d="M13 3C13 3 11 5 8 5S3 3 3 3V17C3 17 6 19 10 19S17 17 17 17V3zM19 3V17C19 17 21 19 23 19V3C21 3 19 3 19 3z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24" fill="currentColor"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24" fill="currentColor"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+</svg>
+
 <div class="container">
     <div class="timeline-axis">
         <div class="axis-dot"></div>
         <div class="axis-hint">
-            <svg viewBox="0 0 24 24" width="0.75em" height="0.75em" fill="currentColor"><path d="M13.5 2C12.12 2 11 3.12 11 4.5V8.5C11 8.78 10.78 9 10.5 9C10.22 9 10 8.78 10 8.5V5.5C10 4.12 8.88 3 7.5 3S5 4.12 5 5.5V12.5L3.44 10.92C2.84 10.32 1.88 10.27 1.22 10.83C.531 11.41.5 12.44 1.08 13.06L5.72 18.14C6.78 19.28 8.27 20 9.97 20H16.5C18.71 20 20.5 18.21 20.5 16V8C20.5 6.62 19.38 5.5 18 5.5C17.22 5.5 16.53 5.84 16.06 6.36C15.78 4.89 14.5 3.75 13 3.75C12.81 3.75 12.63 3.77 12.45 3.81C12.05 2.72 10.89 2 9.5 2H13.5z"/></svg>
+            <svg viewBox="0 0 24 24" width="0.75em" height="0.75em"><use href="#i-hand"/></svg>
             点击标题折叠/展开
         </div>
     </div>
@@ -235,7 +255,7 @@
         </div>
         <div class="toolbar-row">
             <button class="toggle-all-btn" id="toggleAllBtn" tabindex="0" aria-label="全部展开或收起">
-                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                <svg viewBox="0 0 24 24" width="1em" height="1em"><use href="#i-chevron-down"/></svg>
                 全部展开
             </button>
         </div>
@@ -243,18 +263,18 @@
     </div>
     <aside class="side-notes" id="notes-panel">
         <h3>
-            <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M13 3C13 3 11 5 8 5S3 3 3 3V17C3 17 6 19 10 19S17 17 17 17V3zM19 3V17C19 17 21 19 23 19V3C21 3 19 3 19 3z"/></svg>
+            <svg viewBox="0 0 24 24" width="1em" height="1em"><use href="#i-book"/></svg>
             后记
         </h3>
         <div class="notes-container" id="notes-container">
             <div class="notes-mask" id="notes-mask" tabindex="0" role="button" aria-label="点击查看后记">
-                <svg viewBox="0 0 24 24" width="2rem" height="2rem" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/></svg>
+                <svg viewBox="0 0 24 24" width="2rem" height="2rem"><use href="#i-lock"/></svg>
                 <span>点击查看后记</span>
             </div>
             <div class="postscript-content-wrapper" id="postscript-wrapper" style="filter: blur(4px); opacity: 0.6;">
                 <div id="postscript-render"></div>
                 <button class="re-mask-btn" id="reMaskBtn" tabindex="0" style="display:none;">
-                    <svg viewBox="0 0 24 24" width="0.8em" height="0.8em" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    <svg viewBox="0 0 24 24" width="0.8em" height="0.8em" style="vertical-align:middle;margin-right:4px;"><use href="#i-eye-off"/></svg>
                     重新遮蔽
                 </button>
             </div>
@@ -265,15 +285,22 @@
 <div class="nav-float" id="navFloat">
     <div class="nav-panel" id="navPanel"></div>
     <button class="nav-btn" id="navToggle" tabindex="0" aria-label="打开目录" title="章节目录">
-        <svg viewBox="0 0 24 24" width="1.2em" height="1.2em" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+        <svg viewBox="0 0 24 24" width="1.2em" height="1.2em"><use href="#i-list"/></svg>
     </button>
     <button class="nav-btn" id="navTop" tabindex="0" aria-label="回到顶部" title="回到顶部">
-        <svg viewBox="0 0 24 24" width="1.2em" height="1.2em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5m-7 7l7-7 7 7"/></svg>
+        <svg viewBox="0 0 24 24" width="1.2em" height="1.2em"><use href="#i-arrow-up"/></svg>
     </button>
 </div>
 
 <script>
-var sectionsData=[
+
+(function () {
+    'use strict';
+
+    /* ================================================================ data == */
+
+    // Content data is inlined verbatim from the original build; see the header.
+    var sectionsData=[
 {title:"\u591c\u665a",items:[
 {type:"intro",text:"\u76f4\u5230\u591c\u665a\u6765\u4e34\u2014\u2014"},
 {type:"lyric",text:"\u5589\u304c\u713c\u3051\u3001\u591c\u304c\u6765\u306a\u3044\n \u5589\u5499\u70e7\u707c\uff0c\u591c\u5e55\u5374\u4ecd\u672a\u964d\u4e34",song:"\u2014\u2014\u611a\u8005\u306e\u884c\u9032"},
@@ -365,24 +392,671 @@ var sectionsData=[
 {type:"lyric",text:"\u306a\u305e\u308b\u8ab0\u304b\u306e\u8a00\u8449\u3092  \u3044\u3064\u304b\u8981\u3089\u306a\u304f\u306a\u308b\u307e\u3067\n \u76f4\u5230\u6709\u4e00\u5929\u4f60\u4e0d\u518d\u9700\u8981  \u91cd\u590d\u522b\u4eba\u7684\u8bdd\u8bed",song:"\u2014\u2014\u6587\u5b66\u8bb2\u4e49"},
 {type:"lyric",text:"\u3053\u306e\u6b69\u307f\u3067\u3057\u304b\u50d5\u3058\u3083\u306a\u3044\u306a\u3089    \u6c34\u8fba\u3067\u660e\u65e5\u3092\u5f85\u3064\u308f\u3051\u306b\u306f\u884c\u304b\u306a\u3044\n \u53ea\u80fd\u7531\u6211\u81ea\u5df1\u4f86\u8e0f\u51fa\u9019\u4e00\u6b65  \u4e0d\u80fd\u5728\u6c34\u908a\u50bb\u50bb\u7b49\u5f85\u660e\u5929\u5230\u4f86",song:"\u2014\u2014Water Flower"}
 ]}];
-function escapeHtml(s){if(!s)return'';return s.replace(/[&<>"'`]/g,function(m){if(m==='&')return'&amp;';if(m==='<')return'&lt;';if(m==='>')return'&gt;';if(m==='"')return'&quot;';if(m==="'")return'&#39;';if(m==='`')return'&#96;';return m;}).replace(/\n/g,'<br>');}
-function buildLyricStructure(t){if(!t)return{html:'',isPureChinese:false};if(t.includes('\n')){var p=t.split('\n'),o=p[0].trim(),tr=p.slice(1).join('\n').trim();if(tr.length>0)return{html:'<div class="lyric-original">'+escapeHtml(o)+'</div><div class="lyric-translated">'+escapeHtml(tr)+'</div>',isPureChinese:false};else return{html:'<div class="lyric-translated only-chinese">'+escapeHtml(o)+'</div>',isPureChinese:true}}else return{html:'<div class="lyric-translated only-chinese">'+escapeHtml(t)+'</div>',isPureChinese:true}}
-var timelineAxis,axisDot;
-function recalcAxisGeometry(){if(!timelineAxis)return;var ft=document.querySelector('.section-title'),ls=document.querySelector('.section:last-child');if(!ft||!ls)return;var st=ft.getBoundingClientRect().top+window.scrollY-24,eb=ls.getBoundingClientRect().bottom+window.scrollY+30;timelineAxis.style.top=st+'px';timelineAxis.style.height=(eb-st)+'px'}
-function highlightNearestTitle(){if(!timelineAxis||!axisDot)return;var titles=Array.from(document.querySelectorAll('.section-title'));if(!titles.length)return;var dotTop=parseFloat(axisDot.style.top);if(isNaN(dotTop))return;var axisRect=timelineAxis.getBoundingClientRect(),dotY=axisRect.top+dotTop+axisDot.offsetHeight/2,nearest=null,minDist=Infinity;titles.forEach(function(t){var r=t.getBoundingClientRect(),c=r.top+r.height/2,d=Math.abs(c-dotY);if(d<minDist){minDist=d;nearest=t}});titles.forEach(function(t){t.classList.remove('glow-title')});if(nearest&&minDist<100)nearest.classList.add('glow-title')}
-function refreshTimeline(){if(!timelineAxis||!axisDot)return;recalcAxisGeometry();var axisRect=timelineAxis.getBoundingClientRect(),axisH=axisRect.height,dotH=axisDot.offsetHeight,atB=(window.innerHeight+window.scrollY+2)>=document.documentElement.scrollHeight,atT=window.scrollY<=2;if(atT){axisDot.style.top='0px';highlightNearestTitle();return}if(atB){axisDot.style.top=Math.max(0,axisH-dotH)+'px';highlightNearestTitle();return}var ae=getActiveElement();if(!ae){highlightNearestTitle();return}var ar=ae.getBoundingClientRect(),ac=ar.top+ar.height/2,ry=ac-axisRect.top,cy=Math.min(Math.max(ry-dotH/2,0),axisH-dotH);if(isNaN(cy))cy=0;axisDot.style.top=cy+'px';highlightNearestTitle()}
-function getActiveElement(){var c=Array.from(document.querySelectorAll('.section-title, .lyric-card'));if(!c.length)return null;var vc=window.scrollY+window.innerHeight/2,cl=null,md=Infinity;for(var i=0;i<c.length;i++){var e=c[i],r=e.getBoundingClientRect(),cy=r.top+r.height/2+window.scrollY,d=Math.abs(cy-vc);if(d<md){md=d;cl=e}}return cl}
-var ticking=false;function onScrollOrResize(){if(!ticking){requestAnimationFrame(function(){refreshTimeline();ticking=false});ticking=true}}
-function renderSections(){var root=document.getElementById('app-root');if(!root)return;root.innerHTML='';sectionsData.forEach(function(section,secIdx){var sd=document.createElement('div');sd.className='section';var te=document.createElement('div');te.className='section-title';te.setAttribute('tabindex','0');te.setAttribute('role','button');te.innerHTML='<span class="fold-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span><h2>'+escapeHtml(section.title)+'</h2>';sd.appendChild(te);var gis=[];function fg(){if(gis.length){var g=document.createElement('div');g.className='lyric-grid';gis.forEach(function(c){g.appendChild(c)});sd.appendChild(g);gis=[]}}for(var i=0;i<section.items.length;i++){var item=section.items[i];if(item.type==='intro'){fg();var c=document.createElement('div');c.className='section-intro-comment';c.innerHTML='<svg viewBox="0 0 24 24" width="0.8rem" height="0.8rem" fill="currentColor" style="margin-right:8px;opacity:0.7;vertical-align:middle;"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg> '+escapeHtml(item.text);sd.appendChild(c)}else if(item.type==='lyric'){var card=document.createElement('div');card.className='lyric-card';var td=document.createElement('div');td.className='lyric-text';var ly=buildLyricStructure(item.text);td.innerHTML=ly.html;card.appendChild(td);if(item.song){var md=document.createElement('div');md.className='song-meta';md.innerHTML='<svg viewBox="0 0 24 24" width="0.8em" height="0.8em" fill="currentColor"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg><span class="song-name">\u2726 '+escapeHtml(item.song)+'</span>';card.appendChild(md)}else td.classList.add('narrative');gis.push(card)}}fg();root.appendChild(sd);if(secIdx!==sectionsData.length-1){var sp=document.createElement('div');sp.className='section-separator';root.appendChild(sp);}});}
-function setupFoldFeatures(){var sections=document.querySelectorAll('.section');sections.forEach(function(section){var grid=section.querySelector('.lyric-grid');if(!grid)return;if(grid.parentElement&&grid.parentElement.classList.contains('cards-fold-wrapper'))return;var wrapper=document.createElement('div');wrapper.className='cards-fold-wrapper';grid.parentNode.insertBefore(wrapper,grid);wrapper.appendChild(grid);var titleDiv=section.querySelector('.section-title');if(!titleDiv)return;var iconSpan=titleDiv.querySelector('.fold-icon');if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>';wrapper.style.display='none';var expanded=false;var toggleFold=function(e){e.stopPropagation();if(expanded){wrapper.style.display='none';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>';expanded=false}else{wrapper.style.display='block';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>';expanded=true}setTimeout(function(){refreshTimeline()},30);refreshTimeline()};titleDiv.style.cursor='pointer';titleDiv.addEventListener('click',toggleFold);titleDiv.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleFold(e)}})});refreshTimeline()}
-var allExpanded=false;function setupToggleAll(){var btn=document.getElementById('toggleAllBtn');if(!btn)return;btn.addEventListener('click',function(){allExpanded=!allExpanded;var sections=document.querySelectorAll('.section');sections.forEach(function(section){var wrapper=section.querySelector('.cards-fold-wrapper'),titleDiv=section.querySelector('.section-title'),iconSpan=titleDiv?titleDiv.querySelector('.fold-icon'):null;if(!wrapper)return;if(allExpanded){wrapper.style.display='block';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>'}else{wrapper.style.display='none';if(iconSpan)iconSpan.innerHTML='<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>'}});btn.innerHTML=allExpanded?'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg> \u5168\u90e8\u6536\u8d77':'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg> \u5168\u90e8\u5c55\u5f00';setTimeout(function(){refreshTimeline()},50)});btn.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();btn.click()}})}
-function setupNotesMask(){var mask=document.getElementById('notes-mask'),wrapper=document.getElementById('postscript-wrapper'),reMaskBtn=document.getElementById('reMaskBtn');if(!mask||!wrapper)return;function reveal(){mask.style.display='none';wrapper.style.filter='none';wrapper.style.opacity='1';if(reMaskBtn)reMaskBtn.style.display='inline-block'}function conceal(){mask.style.display='flex';wrapper.style.filter='blur(4px)';wrapper.style.opacity='0.6';if(reMaskBtn)reMaskBtn.style.display='none'}mask.addEventListener('click',reveal);mask.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();reveal()}});if(reMaskBtn){reMaskBtn.addEventListener('click',conceal);reMaskBtn.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();conceal()}})}}
-function setupFloatingNav(){var navFloat=document.getElementById('navFloat'),navToggle=document.getElementById('navToggle'),navPanel=document.getElementById('navPanel'),navTop=document.getElementById('navTop');if(!navFloat||!navToggle||!navPanel||!navTop)return;var navVisible=false;window.addEventListener('scroll',function(){if(window.scrollY>300){if(!navVisible){navFloat.classList.add('visible');navVisible=true}}else{if(navVisible){navFloat.classList.remove('visible');navVisible=false}}});navTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});navTop.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})}});var panelOpen=false;function buildNavPanel(){navPanel.innerHTML='';sectionsData.forEach(function(section,idx){var item=document.createElement('button');item.className='nav-panel-item';item.setAttribute('tabindex','0');item.innerHTML='<svg viewBox="0 0 24 24" width="0.75em" height="0.75em" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg> '+escapeHtml(section.title);item.addEventListener('click',function(){var titles=document.querySelectorAll('.section-title');if(titles[idx])titles[idx].scrollIntoView({behavior:'smooth',block:'start'});panelOpen=false;navPanel.classList.remove('open');navToggle.setAttribute('aria-label','\u6253\u5f00\u76ee\u5f55')});item.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();item.click()}});navPanel.appendChild(item)})}buildNavPanel();navToggle.addEventListener('click',function(){panelOpen=!panelOpen;if(panelOpen){navPanel.classList.add('open');navToggle.setAttribute('aria-label','\u5173\u95ed\u76ee\u5f55')}else{navPanel.classList.remove('open');navToggle.setAttribute('aria-label','\u6253\u5f00\u76ee\u5f55')}});navToggle.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();navToggle.click()}});document.addEventListener('click',function(e){if(panelOpen&&!navFloat.contains(e.target)){panelOpen=false;navPanel.classList.remove('open');navToggle.setAttribute('aria-label','\u6253\u5f00\u76ee\u5f55');}});}
-var postscriptData={"postscript":{"sections":[{"title":"后记其一","paragraphs":["**原因**\n>总的来说，依旧是一时兴起的产物，跟日推本身差不多。\n\n因为真的发了很多莫名其妙的日推，也知道肯定没人听（毕竟自己也不听别人的朋友圈推歌）。\n灵光一闪便想着废物利用，而文字重组是再简单不过的方式。就像达达主义那样用四处的元素重新拼贴成一幅画。\n【根本没有研究过达达主义，只是按印象来描述】","**内容介绍**\n>正如大标题，整个内容也不过是在歌词里翻找短句重新排序最后变成意识流，假装很文艺这样。\n\n虽然特意增加了意义不明的引言来让内容在不展开的前提下也勉强有可读性。","**制作**\n>代码没一个字是自己写的（感谢ds），我只是一个拿到名为ai的枪的猴子，制作过程中还一度想放弃。\n\n因为讨厌歌单放了一小段就切掉，所以配备音频来强势安利的方法从根源上被否定。而配备专辑封面图的路线尝试过，但没审美最后又摆烂作罢。\n#\n事实上，支撑着没放弃这个项目只是因为已经串好了这些意识流伪叙述故事，而写下了便容易高傲。\n虽然放弃掉更符合本人的精神状态——逃避现实一般躲入梦境。会有「前行」这一环不过是气氛到了，以及D0里碎碎念过的原因。","**尾声**\n>*给自己的毕业礼物，有人看就是送给看到的人的。*\n\n总之，祝毕业快乐。"]},{"title":"其二——我与音乐","paragraphs":[">*虽然无人在意，很久以前被问到爱好的时候根本没想到回答「听歌」。*\n\n彼时当然没想那么多，只是搪塞了一个已经基本不再关注的领域。\n\n有的人会说不喜欢单曲循环，有的是不喜欢翻唱，也有说不喜欢听歌。或许我是在有人说不喜欢听歌的时候意识到我可以说我是喜欢听歌的。","#>虽然大概看不出来，「有人说不喜欢听歌」这件事几乎算得上我自己的文化冲击（，尽管人家的意思可能只是「算不上喜欢的程度」。\n\n最简单、最直接、最真实、最不绕弯子的说法就是，音乐是我的底噪，我需要我所熟悉的旋律来与世界保持距离，因为我对真实的外界没有兴趣，除非找个好理由变成一个观察员——类似某个测试网站里测出的「钟形罩」分型。","#——————省略一些充满前置知识的跑题——————",">总之，即使现在也无法说听歌是爱好，因为这更像是——比如说插着有线耳机时没有选择将耳机线抓住，而是高举播放器来避免线碰到什么——不觉得像输液吗？（乐）\n\n- *巧言令色的说辞罢了。*"]},{"title":"其三——我与高傲","paragraphs":[">不管不顾的剖白也是一种高傲。"]}]}};function renderMarkdown(t){if(!t)return'';var lines=t.split('\n'),out='',bq=false,ul=false;function inf(s){return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/`(.+?)`/g,'<code>$1</code>')}for(var i=0;i<lines.length;i++){var l=lines[i].trim();if(!l){if(bq){out+='</blockquote>';bq=false}if(ul){out+='</ul>';ul=false}out+='<br>';continue}if(/^#/.test(l)){if(bq){out+='</blockquote>';bq=false}if(ul){out+='</ul>';ul=false}var ht=l.replace(/^#+/,'').trim();out+=ht?'<div style="font-weight:700;color:#64c59e;margin:0.6em 0 0.2em;font-size:0.92rem;">'+inf(ht)+'</div>':'<hr style="border:none;border-top:1px dashed rgba(100,168,206,0.4);margin:0.6em 0;">';continue}if(/^>/.test(l)){if(ul){out+='</ul>';ul=false}if(!bq){out+='<blockquote style="margin:0.3em 0;padding-left:0.8em;border-left:2px solid #64a8ce;color:#cfe2e8;">';bq=true}out+=inf(l.replace(/^> ?/,''))+'<br>';continue}if(/^- /.test(l)){if(bq){out+='</blockquote>';bq=false}if(!ul){out+='<ul style="margin:0.2em 0;padding-left:1.5em;">';ul=true}out+='<li>'+inf(l.replace(/^- /,''))+'</li>';continue}if(bq){out+='</blockquote>';bq=false}if(ul){out+='</ul>';ul=false}out+=inf(l)+'<br>'}if(bq)out+='</blockquote>';if(ul)out+='</ul>';return out.replace(/<br>$/,'')}
 
-function renderPostscript(){var container=document.getElementById('postscript-render');if(!container)return;try{var data=postscriptData;if(!data||!data.postscript||!data.postscript.sections){container.innerHTML='<div class="postscript-block"><div class="postscript-content" style="color:#a88;">后记数据格式错误</div></div>';return}container.innerHTML='';data.postscript.sections.forEach(function(section){var block=document.createElement('div');block.className='postscript-block';var title=document.createElement('div');title.className='postscript-subtitle';title.textContent=section.title;block.appendChild(title);var content=document.createElement('div');content.className='postscript-content';if(section.paragraphs&&section.paragraphs.length){section.paragraphs.forEach(function(p){var para=document.createElement('div');para.className='postscript-paragraph';para.innerHTML=renderMarkdown(p);content.appendChild(para)})}else{content.textContent=''}block.appendChild(content);container.appendChild(block)})}catch(e){container.innerHTML='<div class="postscript-block"><div class="postscript-content" style="color:#a88;">后记数据加载失败</div></div>'}}
-function init(){renderSections();setupFoldFeatures();setupToggleAll();timelineAxis=document.querySelector('.timeline-axis');axisDot=document.querySelector('.axis-dot');if(timelineAxis&&axisDot){recalcAxisGeometry();refreshTimeline();window.addEventListener('load',function(){recalcAxisGeometry();refreshTimeline()});window.addEventListener('scroll',onScrollOrResize);window.addEventListener('resize',function(){recalcAxisGeometry();onScrollOrResize()})}setupNotesMask();setupFloatingNav();renderPostscript()}
-init();
+var postscriptData={"postscript":{"sections":[{"title":"后记其一","paragraphs":["**原因**\n>总的来说，依旧是一时兴起的产物，跟日推本身差不多。\n\n因为真的发了很多莫名其妙的日推，也知道肯定没人听（毕竟自己也不听别人的朋友圈推歌）。\n灵光一闪便想着废物利用，而文字重组是再简单不过的方式。就像达达主义那样用四处的元素重新拼贴成一幅画。\n【根本没有研究过达达主义，只是按印象来描述】","**内容介绍**\n>正如大标题，整个内容也不过是在歌词里翻找短句重新排序最后变成意识流，假装很文艺这样。\n\n虽然特意增加了意义不明的引言来让内容在不展开的前提下也勉强有可读性。","**制作**\n>代码没一个字是自己写的（感谢ds），我只是一个拿到名为ai的枪的猴子，制作过程中还一度想放弃。\n\n因为讨厌歌单放了一小段就切掉，所以配备音频来强势安利的方法从根源上被否定。而配备专辑封面图的路线尝试过，但没审美最后又摆烂作罢。\n#\n事实上，支撑着没放弃这个项目只是因为已经串好了这些意识流伪叙述故事，而写下了便容易高傲。\n虽然放弃掉更符合本人的精神状态——逃避现实一般躲入梦境。会有「前行」这一环不过是气氛到了，以及D0里碎碎念过的原因。","**尾声**\n>*给自己的毕业礼物，有人看就是送给看到的人的。*\n\n总之，祝毕业快乐。"]},{"title":"其二——我与音乐","paragraphs":[">*虽然无人在意，很久以前被问到爱好的时候根本没想到回答「听歌」。*\n\n彼时当然没想那么多，只是搪塞了一个已经基本不再关注的领域。\n\n有的人会说不喜欢单曲循环，有的是不喜欢翻唱，也有说不喜欢听歌。或许我是在有人说不喜欢听歌的时候意识到我可以说我是喜欢听歌的。","#>虽然大概看不出来，「有人说不喜欢听歌」这件事几乎算得上我自己的文化冲击（，尽管人家的意思可能只是「算不上喜欢的程度」。\n\n最简单、最直接、最真实、最不绕弯子的说法就是，音乐是我的底噪，我需要我所熟悉的旋律来与世界保持距离，因为我对真实的外界没有兴趣，除非找个好理由变成一个观察员——类似某个测试网站里测出的「钟形罩」分型。","#——————省略一些充满前置知识的跑题——————",">总之，即使现在也无法说听歌是爱好，因为这更像是——比如说插着有线耳机时没有选择将耳机线抓住，而是高举播放器来避免线碰到什么——不觉得像输液吗？（乐）\n\n- *巧言令色的说辞罢了。*"]},{"title":"其三——我与高傲","paragraphs":[">不管不顾的剖白也是一种高傲。"]}]}};
+
+    /* =========================================================== constants == */
+
+    // Icon references, so no call site repeats a <path> again.
+    var ICON = {
+        hand: 'i-hand',
+        chevronDown: 'i-chevron-down',
+        chevronRight: 'i-chevron-right',
+        list: 'i-list',
+        arrowUp: 'i-arrow-up',
+        caret: 'i-caret',
+        book: 'i-book',
+        lock: 'i-lock',
+        quote: 'i-quote',
+        music: 'i-music',
+        eyeOff: 'i-eye-off'
+    };
+
+    var FOLD_CLASS = 'fold-icon';
+    var FOLD_ICON_COLLAPSED = ICON.chevronRight;
+    var FOLD_ICON_EXPANDED = ICON.chevronDown;
+
+    var NAV_LABEL_OPEN = '\u6253\u5f00\u76ee\u5f55';
+    var NAV_LABEL_CLOSE = '\u5173\u95ed\u76ee\u5f55';
+    var SONG_PREFIX = '\u2726 ';
+
+    // Mirrors the original guard against an event firing during setup.
+    var BOOTING = true;
+    var NAV_SHOW_AFTER = 300;
+    var GLOW_MAX_DISTANCE = 100;
+    var FOLD_ANIMATION_DELAY = 30;
+    var TOGGLE_ALL_DELAY = 50;
+
+    var BQ_OPEN = '<blockquote style="margin:0.3em 0;padding-left:0.8em;border-left:2px solid #64a8ce;color:#cfe2e8;">';
+    var UL_OPEN = '<ul style="margin:0.2em 0;padding-left:1.5em;">';
+    var HEADING_OPEN = '<div style="font-weight:700;color:#64c59e;margin:0.6em 0 0.2em;font-size:0.92rem;">';
+    var RULE = '<hr style="border:none;border-top:1px dashed rgba(100,168,206,0.4);margin:0.6em 0;">';
+
+    var HTML_ESCAPES = {
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;'
+    };
+
+    /* ============================================================== helpers == */
+
+    /**
+     * Wrap a symbol reference in an SVG element.
+     * @param {string} symbol - symbol id from the sprite.
+     * @param {string} [style] - inline style attribute value.
+     */
+    function icon(symbol, style) {
+        return '<svg viewBox="0 0 24 24" width="1em" height="1em"' +
+            (style ? ' style="' + style + '"' : '') +
+            '><use href="#' + symbol + '"/></svg>';
+    }
+
+    /** Escape a value for safe insertion into generated HTML. */
+    function escapeHtml(s) {
+        if (!s) return '';
+        return s.replace(/[&<>"'`]/g, function (m) {
+            if (m === '&') return '&amp;';
+            if (m === "'") return '&#39;';
+            if (m === '`') return '&#96;';
+            return HTML_ESCAPES[m] || m;
+        }).replace(/\n/g, '<br>');
+    }
+
+    /**
+     * Split a lyric entry into its original/translated halves.
+     * @returns {{html: string, isPureChinese: boolean}}
+     */
+    function buildLyricStructure(text) {
+        if (!text) return { html: '', isPureChinese: false };
+
+        if (!text.includes('\n')) {
+            return {
+                html: '<div class="lyric-translated only-chinese">' + escapeHtml(text) + '</div>',
+                isPureChinese: true
+            };
+        }
+
+        var parts = text.split('\n');
+        var original = parts[0].trim();
+        var translated = parts.slice(1).join('\n').trim();
+
+        if (translated.length === 0) {
+            return {
+                html: '<div class="lyric-translated only-chinese">' + escapeHtml(original) + '</div>',
+                isPureChinese: true
+            };
+        }
+
+        return {
+            html: '<div class="lyric-original">' + escapeHtml(original) + '</div>' +
+                  '<div class="lyric-translated">' + escapeHtml(translated) + '</div>',
+            isPureChinese: false
+        };
+    }
+
+    /** Call fn unless an Enter/Space key event is already being handled. */
+    function onActivateKey(fn) {
+        return function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                fn(event);
+            }
+        };
+    }
+
+    /* ======================================================= view fragments == */
+
+    function foldIconSvg(symbol) {
+        return '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.5">' +
+            '<use href="#' + symbol + '"/></svg>';
+    }
+
+    function foldIconSpan(symbol) {
+        return '<span class="' + FOLD_CLASS + '">' + foldIconSvg(symbol) + '</span>';
+    }
+
+    function introComment(text) {
+        var el = document.createElement('div');
+        el.className = 'section-intro-comment';
+        el.innerHTML = icon(ICON.quote, 'margin-right:8px;opacity:0.7;vertical-align:middle;') + ' ' + escapeHtml(text);
+        return el;
+    }
+
+    function lyricCard(item) {
+        var card = document.createElement('div');
+        card.className = 'lyric-card';
+
+        var textEl = document.createElement('div');
+        textEl.className = 'lyric-text';
+        textEl.innerHTML = buildLyricStructure(item.text).html;
+        card.appendChild(textEl);
+
+        if (item.song) {
+            var metaEl = document.createElement('div');
+            metaEl.className = 'song-meta';
+            metaEl.innerHTML = icon(ICON.music) +
+                '<span class="song-name">' + SONG_PREFIX + escapeHtml(item.song) + '</span>';
+            card.appendChild(metaEl);
+        } else {
+            textEl.classList.add('narrative');
+        }
+
+        return card;
+    }
+
+    function sectionTitle(section) {
+        var titleEl = document.createElement('div');
+        titleEl.className = 'section-title';
+        titleEl.setAttribute('tabindex', '0');
+        titleEl.setAttribute('role', 'button');
+        titleEl.innerHTML = foldIconSpan(FOLD_ICON_COLLAPSED) +
+            '<h2>' + escapeHtml(section.title) + '</h2>';
+        return titleEl;
+    }
+
+    /* ============================================================== timeline == */
+
+    var timelineAxis = null;
+    var axisDot = null;
+
+    function recalcAxisGeometry() {
+        if (!timelineAxis) return;
+
+        var firstTitle = document.querySelector('.section-title');
+        var lastSection = document.querySelector('.section:last-child');
+        if (!firstTitle || !lastSection) return;
+
+        var startTop = firstTitle.getBoundingClientRect().top + window.scrollY - 24;
+        var endBottom = lastSection.getBoundingClientRect().bottom + window.scrollY + 30;
+
+        timelineAxis.style.top = startTop + 'px';
+        timelineAxis.style.height = (endBottom - startTop) + 'px';
+    }
+
+    function highlightNearestTitle() {
+        if (!timelineAxis || !axisDot) return;
+
+        var titles = Array.from(document.querySelectorAll('.section-title'));
+        if (!titles.length) return;
+
+        var dotTop = parseFloat(axisDot.style.top);
+        if (isNaN(dotTop)) return;
+
+        var axisRect = timelineAxis.getBoundingClientRect();
+        var dotY = axisRect.top + dotTop + axisDot.offsetHeight / 2;
+        var nearest = null;
+        var minDist = Infinity;
+
+        titles.forEach(function (title) {
+            var rect = title.getBoundingClientRect();
+            var center = rect.top + rect.height / 2;
+            var dist = Math.abs(center - dotY);
+            if (dist < minDist) {
+                minDist = dist;
+                nearest = title;
+            }
+        });
+
+        titles.forEach(function (title) { title.classList.remove('glow-title'); });
+        if (nearest && minDist < GLOW_MAX_DISTANCE) nearest.classList.add('glow-title');
+    }
+
+    /** The title or card closest to the middle of the viewport. */
+    function getActiveElement() {
+        var candidates = Array.from(document.querySelectorAll('.section-title, .lyric-card'));
+        if (!candidates.length) return null;
+
+        var viewportCenter = window.scrollY + window.innerHeight / 2;
+        var closest = null;
+        var minDist = Infinity;
+
+        for (var i = 0; i < candidates.length; i++) {
+            var el = candidates[i];
+            var rect = el.getBoundingClientRect();
+            var center = rect.top + rect.height / 2 + window.scrollY;
+            var dist = Math.abs(center - viewportCenter);
+            if (dist < minDist) {
+                minDist = dist;
+                closest = el;
+            }
+        }
+
+        return closest;
+    }
+
+    function refreshTimeline() {
+        if (!timelineAxis || !axisDot) return;
+        recalcAxisGeometry();
+
+        var axisHeight = timelineAxis.getBoundingClientRect().height;
+        var dotHeight = axisDot.offsetHeight;
+        var atBottom = (window.innerHeight + window.scrollY + 2) >= document.documentElement.scrollHeight;
+        var atTop = window.scrollY <= 2;
+
+        if (atTop) {
+            axisDot.style.top = '0px';
+            highlightNearestTitle();
+            return;
+        }
+
+        if (atBottom) {
+            axisDot.style.top = Math.max(0, axisHeight - dotHeight) + 'px';
+            highlightNearestTitle();
+            return;
+        }
+
+        var active = getActiveElement();
+        if (!active) {
+            highlightNearestTitle();
+            return;
+        }
+
+        var activeRect = active.getBoundingClientRect();
+        var activeCenter = activeRect.top + activeRect.height / 2;
+        var relativeY = activeCenter - timelineAxis.getBoundingClientRect().top;
+        var nextTop = Math.min(Math.max(relativeY - dotHeight / 2, 0), axisHeight - dotHeight);
+        if (isNaN(nextTop)) nextTop = 0;
+        axisDot.style.top = nextTop + 'px';
+
+        highlightNearestTitle();
+    }
+
+    var scrollTicking = false;
+    function onScrollOrResize() {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(function () {
+            refreshTimeline();
+            scrollTicking = false;
+        });
+    }
+
+    /* =============================================================== render == */
+
+    function renderSections() {
+        var root = document.getElementById('app-root');
+        if (!root) return;
+
+        root.innerHTML = '';
+
+        sectionsData.forEach(function (section, secIdx) {
+            var sectionEl = document.createElement('div');
+            sectionEl.className = 'section';
+            sectionEl.appendChild(sectionTitle(section));
+
+            // Lyric cards accumulate here and flush into a .lyric-grid whenever an
+            // intro interrupts the run, reproducing the original grouping exactly.
+            var pendingCards = [];
+
+            function flushCards() {
+                if (!pendingCards.length) return;
+                var grid = document.createElement('div');
+                grid.className = 'lyric-grid';
+                pendingCards.forEach(function (card) { grid.appendChild(card); });
+                sectionEl.appendChild(grid);
+                pendingCards = [];
+            }
+
+            for (var i = 0; i < section.items.length; i++) {
+                var item = section.items[i];
+                if (item.type === 'intro') {
+                    flushCards();
+                    sectionEl.appendChild(introComment(item.text));
+                } else if (item.type === 'lyric') {
+                    pendingCards.push(lyricCard(item));
+                }
+            }
+
+            flushCards();
+            root.appendChild(sectionEl);
+
+            if (secIdx !== sectionsData.length - 1) {
+                var separator = document.createElement('div');
+                separator.className = 'section-separator';
+                root.appendChild(separator);
+            }
+        });
+    }
+
+    function renderPostscript() {
+        var container = document.getElementById('postscript-render');
+        if (!container) return;
+
+        try {
+            var data = postscriptData;
+            if (!data || !data.postscript || !data.postscript.sections) {
+                container.innerHTML = '<div class="postscript-block">' +
+                    '<div class="postscript-content" style="color:#a88;">后记数据格式错误</div></div>';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            data.postscript.sections.forEach(function (section) {
+                var block = document.createElement('div');
+                block.className = 'postscript-block';
+
+                var title = document.createElement('div');
+                title.className = 'postscript-subtitle';
+                title.textContent = section.title;
+                block.appendChild(title);
+
+                var content = document.createElement('div');
+                content.className = 'postscript-content';
+
+                if (section.paragraphs && section.paragraphs.length) {
+                    section.paragraphs.forEach(function (paragraph) {
+                        var para = document.createElement('div');
+                        para.className = 'postscript-paragraph';
+                        para.innerHTML = renderMarkdown(paragraph);
+                        content.appendChild(para);
+                    });
+                } else {
+                    content.textContent = '';
+                }
+
+                block.appendChild(content);
+                container.appendChild(block);
+            });
+        } catch (e) {
+            container.innerHTML = '<div class="postscript-block">' +
+                '<div class="postscript-content" style="color:#a88;">后记数据加载失败</div></div>';
+        }
+    }
+
+    /* ============================================================= markdown == */
+
+    /**
+     * Minimal markdown renderer for the postscript: emphasis, links, inline code,
+     * headings, blockquotes, list items and horizontal rules.
+     */
+    function renderMarkdown(text) {
+        if (!text) return '';
+
+        var out = '';
+        var inBlockquote = false;
+        var inList = false;
+
+        function inline(s) {
+            return s
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/`(.+?)`/g, '<code>$1</code>');
+        }
+
+        function closeBlockquote() {
+            if (!inBlockquote) return;
+            out += '</blockquote>';
+            inBlockquote = false;
+        }
+
+        function closeList() {
+            if (!inList) return;
+            out += '</ul>';
+            inList = false;
+        }
+
+        text.split('\n').forEach(function (rawLine) {
+            var line = rawLine.trim();
+
+            if (!line) {
+                closeBlockquote();
+                closeList();
+                out += '<br>';
+                return;
+            }
+
+            if (/^#/.test(line)) {
+                closeBlockquote();
+                closeList();
+                var heading = line.replace(/^#+/, '').trim();
+                out += heading ? HEADING_OPEN + inline(heading) + '</div>' : RULE;
+                return;
+            }
+
+            if (/^>/.test(line)) {
+                closeList();
+                if (!inBlockquote) {
+                    out += BQ_OPEN;
+                    inBlockquote = true;
+                }
+                out += inline(line.replace(/^> ?/, '')) + '<br>';
+                return;
+            }
+
+            if (/^- /.test(line)) {
+                closeBlockquote();
+                if (!inList) {
+                    out += UL_OPEN;
+                    inList = true;
+                }
+                out += '<li>' + inline(line.replace(/^- /, '')) + '</li>';
+                return;
+            }
+
+            closeBlockquote();
+            closeList();
+            out += inline(line) + '<br>';
+        });
+
+        closeBlockquote();
+        closeList();
+
+        return out.replace(/<br>$/, '');
+    }
+
+    /* ============================================================ behaviours == */
+
+    /**
+     * Wrap each lyric grid in a collapsible container and wire the title toggle.
+     */
+    function setupFoldFeatures() {
+        document.querySelectorAll('.section').forEach(function (section) {
+            var grid = section.querySelector('.lyric-grid');
+            if (!grid) return;
+            if (grid.parentElement && grid.parentElement.classList.contains('cards-fold-wrapper')) return;
+
+            var wrapper = document.createElement('div');
+            wrapper.className = 'cards-fold-wrapper';
+            grid.parentNode.insertBefore(wrapper, grid);
+            wrapper.appendChild(grid);
+
+            var titleDiv = section.querySelector('.section-title');
+            if (!titleDiv) return;
+
+            var iconSpan = titleDiv.querySelector('.' + FOLD_CLASS);
+            if (iconSpan) iconSpan.innerHTML = foldIconSvg(FOLD_ICON_COLLAPSED);
+
+            wrapper.style.display = 'none';
+            var expanded = false;
+
+            function toggleFold(event) {
+                event.stopPropagation();
+                expanded = !expanded;
+                wrapper.style.display = expanded ? 'block' : 'none';
+                if (iconSpan) {
+                    iconSpan.innerHTML = foldIconSvg(expanded ? FOLD_ICON_EXPANDED : FOLD_ICON_COLLAPSED);
+                }
+                setTimeout(refreshTimeline, FOLD_ANIMATION_DELAY);
+                refreshTimeline();
+            }
+
+            titleDiv.style.cursor = 'pointer';
+            titleDiv.addEventListener('click', toggleFold);
+            titleDiv.addEventListener('keydown', onActivateKey(toggleFold));
+        });
+
+        refreshTimeline();
+    }
+
+    /** The toolbar button that expands or collapses every section at once. */
+    function setupToggleAll() {
+        var btn = document.getElementById('toggleAllBtn');
+        if (!btn) return;
+
+        var allExpanded = false;
+
+        btn.addEventListener('click', function () {
+            if (BOOTING) return;
+
+            allExpanded = !allExpanded;
+
+            document.querySelectorAll('.section').forEach(function (section) {
+                var wrapper = section.querySelector('.cards-fold-wrapper');
+                var titleDiv = section.querySelector('.section-title');
+                var iconSpan = titleDiv ? titleDiv.querySelector('.' + FOLD_CLASS) : null;
+                if (!wrapper) return;
+
+                wrapper.style.display = allExpanded ? 'block' : 'none';
+                if (iconSpan) {
+                    iconSpan.innerHTML = foldIconSvg(allExpanded ? FOLD_ICON_EXPANDED : FOLD_ICON_COLLAPSED);
+                }
+            });
+
+            btn.innerHTML = foldIconSvg(FOLD_ICON_EXPANDED) +
+                (allExpanded ? ' 全部收起' : ' 全部展开');
+
+            setTimeout(refreshTimeline, TOGGLE_ALL_DELAY);
+        });
+
+        btn.addEventListener('keydown', onActivateKey(function () { btn.click(); }));
+    }
+
+    /** The blur mask over the postscript, and the button that restores it. */
+    function setupNotesMask() {
+        var mask = document.getElementById('notes-mask');
+        var wrapper = document.getElementById('postscript-wrapper');
+        var reMaskBtn = document.getElementById('reMaskBtn');
+        if (!mask || !wrapper) return;
+
+        function reveal() {
+            mask.style.display = 'none';
+            wrapper.style.filter = 'none';
+            wrapper.style.opacity = '1';
+            if (reMaskBtn) reMaskBtn.style.display = 'inline-block';
+        }
+
+        function conceal() {
+            mask.style.display = 'flex';
+            wrapper.style.filter = 'blur(4px)';
+            wrapper.style.opacity = '0.6';
+            if (reMaskBtn) reMaskBtn.style.display = 'none';
+        }
+
+        mask.addEventListener('click', reveal);
+        mask.addEventListener('keydown', onActivateKey(reveal));
+
+        if (reMaskBtn) {
+            reMaskBtn.addEventListener('click', conceal);
+            reMaskBtn.addEventListener('keydown', onActivateKey(conceal));
+        }
+    }
+
+    /** The floating table-of-contents and back-to-top buttons. */
+    function setupFloatingNav() {
+        var navFloat = document.getElementById('navFloat');
+        var navToggle = document.getElementById('navToggle');
+        var navPanel = document.getElementById('navPanel');
+        var navTop = document.getElementById('navTop');
+        if (!navFloat || !navToggle || !navPanel || !navTop) return;
+
+        var navVisible = false;
+        var panelOpen = false;
+
+        function setNavLabel(label) {
+            navToggle.setAttribute('aria-label', label);
+        }
+
+        function closePanel() {
+            panelOpen = false;
+            navPanel.classList.remove('open');
+            setNavLabel(NAV_LABEL_OPEN);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', function () {
+            var shouldShow = window.scrollY > NAV_SHOW_AFTER;
+            if (shouldShow === navVisible) return;
+            navVisible = shouldShow;
+            navFloat.classList.toggle('visible', navVisible);
+        });
+
+        navTop.addEventListener('click', scrollToTop);
+        navTop.addEventListener('keydown', onActivateKey(scrollToTop));
+
+        function buildNavPanel() {
+            navPanel.innerHTML = '';
+            sectionsData.forEach(function (section, idx) {
+                var item = document.createElement('button');
+                item.className = 'nav-panel-item';
+                item.setAttribute('tabindex', '0');
+                item.innerHTML = icon(ICON.caret) + ' ' + escapeHtml(section.title);
+
+                item.addEventListener('click', function () {
+                    var titles = document.querySelectorAll('.section-title');
+                    if (titles[idx]) titles[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    closePanel();
+                });
+                item.addEventListener('keydown', onActivateKey(function () { item.click(); }));
+
+                navPanel.appendChild(item);
+            });
+        }
+
+        buildNavPanel();
+
+        navToggle.addEventListener('click', function () {
+            if (panelOpen) {
+                closePanel();
+            } else {
+                panelOpen = true;
+                navPanel.classList.add('open');
+                setNavLabel(NAV_LABEL_CLOSE);
+            }
+        });
+        navToggle.addEventListener('keydown', onActivateKey(function () { navToggle.click(); }));
+
+        document.addEventListener('click', function (event) {
+            if (panelOpen && !navFloat.contains(event.target)) closePanel();
+        });
+    }
+
+    /* ================================================================== boot == */
+
+    function init() {
+        renderSections();
+        setupFoldFeatures();
+        setupToggleAll();
+
+        timelineAxis = document.querySelector('.timeline-axis');
+        axisDot = document.querySelector('.axis-dot');
+        if (timelineAxis && axisDot) {
+            recalcAxisGeometry();
+            refreshTimeline();
+            window.addEventListener('load', function () {
+                recalcAxisGeometry();
+                refreshTimeline();
+            });
+            window.addEventListener('scroll', onScrollOrResize);
+            window.addEventListener('resize', function () {
+                recalcAxisGeometry();
+                onScrollOrResize();
+            });
+        }
+
+        setupNotesMask();
+        setupFloatingNav();
+        renderPostscript();
+
+        BOOTING = false;
+    }
+
+    init();
+})();
 </script>
 </body>
 </html>
